@@ -1072,6 +1072,33 @@
     document.querySelectorAll('.modal').forEach(m => {
       m.addEventListener('click', e => e.stopPropagation());
     });
+
+    // ── INJECT IMAGES FROM ADMIN (localStorage) ──────────────
+    (function injectImages() {
+      try {
+        const raw = localStorage.getItem('rp_golden_articles');
+        if (!raw) return;
+        const articles = JSON.parse(raw);
+        articles.forEach(art => {
+          if (!art.image || !art.id) return;
+          const imgTag = `<img src="${art.image}" alt="${art.title}" style="width:100%;height:100%;object-fit:cover;display:block;">`;
+
+          // Featured article (art5)
+          if (art.id === 'art5') {
+            const wrap = document.querySelector('.featured-article .art-image-wrap .img-placeholder');
+            if (wrap) wrap.outerHTML = imgTag;
+          }
+
+          // Grid articles (art1–art4)
+          const gridWrap = document.querySelector(`[onclick="openModal('${art.id}')"] .grid-art-image .img-placeholder`);
+          if (gridWrap) gridWrap.outerHTML = imgTag;
+
+          // Modal image
+          const modalWrap = document.querySelector(`#modal-${art.id} .modal-img .img-placeholder`);
+          if (modalWrap) modalWrap.outerHTML = imgTag;
+        });
+      } catch(e) {}
+    })();
   </script>
 </body>
 </html>
