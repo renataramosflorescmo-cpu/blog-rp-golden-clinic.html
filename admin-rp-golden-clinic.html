@@ -1522,6 +1522,10 @@ function previewArticle() {
   toast('Pré-visualização disponível no Blog.', 'success');
 }
 
+// Supabase config
+const SUPABASE_URL = 'https://bggqklkeqdmkefvrjuka.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJnZ3FrbGtlcWRta2VmdnJqdWthIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ5ODIzOTYsImV4cCI6MjA5MDU1ODM5Nn0.mV0Hq6vOgyEKZQk5379_UoBU96vnfWl-VCFgT0DHiZs';
+
 // Image upload
 function handleImg(e) {
   const file = e.target.files[0];
@@ -1537,13 +1541,28 @@ function handleImg(e) {
       if (w > MAX) { h = Math.round(h * MAX / w); w = MAX; }
       canvas.width = w; canvas.height = h;
       canvas.getContext('2d').drawImage(img, 0, 0, w, h);
-      const data = canvas.toDataURL('image/jpeg', 0.75);
-      document.getElementById('ed-img-data').value = data;
-      document.getElementById('img-preview').src = data;
-      document.getElementById('img-preview').style.display = 'block';
-      document.getElementById('upload-zone').style.display = 'none';
-      document.getElementById('img-name').textContent = '✓ ' + file.name;
-      document.getElementById('img-name').style.display = 'block';
+      canvas.toBlob(async blob => {
+        const fileName = 'art_' + Date.now() + '.jpg';
+        toast('Enviando imagem...', 'success');
+        try {
+          const res = await fetch(`${SUPABASE_URL}/storage/v1/object/blog-images/${fileName}`, {
+            method: 'POST',
+            headers: { 'Authorization': `Bearer ${SUPABASE_KEY}`, 'Content-Type': 'image/jpeg' },
+            body: blob
+          });
+          if (!res.ok) throw new Error(await res.text());
+          const publicUrl = `${SUPABASE_URL}/storage/v1/object/public/blog-images/${fileName}`;
+          document.getElementById('ed-img-data').value = publicUrl;
+          document.getElementById('img-preview').src = publicUrl;
+          document.getElementById('img-preview').style.display = 'block';
+          document.getElementById('upload-zone').style.display = 'none';
+          document.getElementById('img-name').textContent = '✓ ' + file.name;
+          document.getElementById('img-name').style.display = 'block';
+          toast('Imagem enviada com sucesso!', 'success');
+        } catch(err) {
+          toast('Erro ao enviar imagem: ' + err.message, 'error');
+        }
+      }, 'image/jpeg', 0.75);
     };
     img.src = ev.target.result;
   };
