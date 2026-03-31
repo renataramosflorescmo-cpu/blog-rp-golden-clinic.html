@@ -1542,7 +1542,8 @@ function handleImg(e) {
       canvas.width = w; canvas.height = h;
       canvas.getContext('2d').drawImage(img, 0, 0, w, h);
       canvas.toBlob(async blob => {
-        const fileName = 'art_' + Date.now() + '.jpg';
+        const artId = document.getElementById('ed-id').value || ('art_' + Date.now());
+        const fileName = artId + '.jpg';
         toast('Enviando imagem...', 'success');
         try {
           const res = await fetch(`${SUPABASE_URL}/storage/v1/object/blog-images/${fileName}`, {
