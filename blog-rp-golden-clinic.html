@@ -1,0 +1,1127 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Blog – RP Golden Clinic</title>
+  <meta name="description" content="Blog da RP Golden Clinic. Artigos sobre dermatologia estética avançada, bioestimuladores, toxina botulínica, harmonização facial e skincare, pela Dra. Roberta Castro Peres.">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --gold:       #C9A96E;
+      --gold-light: #E8D5B0;
+      --gold-dark:  #9A7540;
+      --cream:      #FAF7F2;
+      --off-white:  #F2EDE4;
+      --dark:       #1A1612;
+      --mid:        #3D3530;
+      --muted:      #8A7D72;
+      --border:     rgba(201,169,110,0.25);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Jost', sans-serif;
+      background: var(--cream);
+      color: var(--dark);
+      font-weight: 300;
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    /* ── HEADER / NAV ─────────────────────────────── */
+    .site-header {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      background: rgba(250,247,242,0.96);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 5vw;
+      height: 72px;
+    }
+    .logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.4rem;
+      font-weight: 600;
+      letter-spacing: .12em;
+      color: var(--dark);
+      text-decoration: none;
+    }
+    .logo span { color: var(--gold); }
+    nav { display: flex; gap: 2.4rem; align-items: center; }
+    nav a {
+      font-size: .78rem;
+      font-weight: 500;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--mid);
+      text-decoration: none;
+      transition: color .25s;
+    }
+    nav a:hover, nav a.active { color: var(--gold); }
+    .nav-cta {
+      background: var(--gold);
+      color: #fff !important;
+      padding: .5rem 1.4rem;
+      letter-spacing: .12em;
+    }
+    .nav-cta:hover { background: var(--gold-dark); color: #fff !important; }
+
+    /* ── HERO BANNER ──────────────────────────────── */
+    .blog-hero {
+      margin-top: 72px;
+      position: relative;
+      height: 420px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      background: var(--dark);
+    }
+    .blog-hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg, #1A1612 0%, #3D3530 50%, #1A1612 100%);
+    }
+    .blog-hero::after {
+      content: '';
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 30% 50%, rgba(201,169,110,.13) 0%, transparent 70%),
+        radial-gradient(ellipse 60% 80% at 80% 30%, rgba(201,169,110,.07) 0%, transparent 60%);
+    }
+    /* golden line decoration */
+    .hero-line {
+      position: absolute;
+      top: 50%; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent 0%, var(--gold) 30%, var(--gold) 70%, transparent 100%);
+      opacity: .18;
+    }
+    .blog-hero-content {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+    }
+    .hero-eyebrow {
+      display: inline-block;
+      font-size: .72rem;
+      font-weight: 500;
+      letter-spacing: .3em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1.2rem;
+    }
+    .hero-eyebrow::before, .hero-eyebrow::after {
+      content: '—';
+      margin: 0 .8rem;
+      opacity: .6;
+    }
+    .blog-hero h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.8rem, 6vw, 4.8rem);
+      font-weight: 300;
+      color: #fff;
+      line-height: 1.1;
+      letter-spacing: .04em;
+    }
+    .blog-hero h1 em { font-style: italic; color: var(--gold-light); }
+    .hero-sub {
+      margin-top: 1rem;
+      font-size: .88rem;
+      color: rgba(255,255,255,.45);
+      letter-spacing: .1em;
+    }
+
+    /* ── LAYOUT ───────────────────────────────────── */
+    .container {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 0 5vw;
+    }
+    .section-label {
+      display: flex;
+      align-items: center;
+      gap: 1.2rem;
+      margin-bottom: 3.5rem;
+    }
+    .section-label span {
+      font-size: .72rem;
+      font-weight: 500;
+      letter-spacing: .28em;
+      text-transform: uppercase;
+      color: var(--gold);
+      white-space: nowrap;
+    }
+    .section-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    /* ── MAIN ARTICLE (featured) ──────────────────── */
+    .articles-section { padding: 7rem 0 5rem; }
+
+    .featured-article {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+      background: #fff;
+      border: 1px solid var(--border);
+      margin-bottom: 5rem;
+      overflow: hidden;
+      box-shadow: 0 8px 48px rgba(26,22,18,.07);
+      animation: fadeUp .7s ease both;
+    }
+    @keyframes fadeUp {
+      from { opacity:0; transform: translateY(28px); }
+      to   { opacity:1; transform: translateY(0); }
+    }
+
+    /* image banner */
+    .art-image-wrap {
+      position: relative;
+      min-height: 420px;
+      overflow: hidden;
+      background: var(--off-white);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    .art-image-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      position: absolute;
+      inset: 0;
+      display: block;
+    }
+    /* Placeholder shown when no real image */
+    .img-placeholder {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #EDE5D8 0%, #D8CCB8 100%);
+    }
+    .img-placeholder svg { opacity: .3; margin-bottom: .8rem; }
+    .img-placeholder p {
+      font-size: .75rem;
+      font-weight: 500;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: var(--gold-dark);
+      opacity: .7;
+    }
+    /* Overlay gold tag */
+    .art-tag {
+      position: absolute;
+      bottom: 1.5rem; left: 1.5rem;
+      background: var(--gold);
+      color: #fff;
+      font-size: .68rem;
+      font-weight: 600;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      padding: .35rem .9rem;
+      z-index: 2;
+    }
+
+    .art-body {
+      padding: 3.5rem 3rem 3rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .art-meta {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1.4rem;
+    }
+    .art-date {
+      font-size: .72rem;
+      font-weight: 500;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .art-dot { width: 3px; height: 3px; border-radius: 50%; background: var(--gold); flex-shrink: 0; }
+    .art-read {
+      font-size: .72rem;
+      letter-spacing: .1em;
+      color: var(--muted);
+    }
+    .art-body h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.6rem, 2.4vw, 2.2rem);
+      font-weight: 400;
+      line-height: 1.22;
+      color: var(--dark);
+      margin-bottom: 1.2rem;
+    }
+    .art-body h2 em { font-style: italic; color: var(--gold-dark); }
+    .art-excerpt {
+      font-size: .9rem;
+      color: var(--muted);
+      line-height: 1.8;
+      margin-bottom: 2rem;
+    }
+    .art-author {
+      display: flex;
+      align-items: center;
+      gap: .9rem;
+      margin-bottom: 2rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border);
+    }
+    .author-avatar {
+      width: 38px; height: 38px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--gold-light), var(--gold));
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1rem; font-weight: 600;
+      color: #fff;
+      flex-shrink: 0;
+    }
+    .author-info { line-height: 1.3; }
+    .author-name { font-size: .78rem; font-weight: 500; color: var(--dark); }
+    .author-crm  { font-size: .7rem; color: var(--muted); }
+    .read-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: .7rem;
+      font-size: .76rem;
+      font-weight: 500;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: var(--gold);
+      text-decoration: none;
+      border: 1px solid var(--gold);
+      padding: .7rem 1.6rem;
+      transition: background .25s, color .25s;
+      cursor: pointer;
+      background: none;
+      width: fit-content;
+    }
+    .read-btn:hover { background: var(--gold); color: #fff; }
+    .read-btn svg { transition: transform .25s; }
+    .read-btn:hover svg { transform: translateX(4px); }
+
+    /* ── GRID ARTICLES ────────────────────────────── */
+    .articles-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2.4rem;
+    }
+    .grid-article {
+      background: #fff;
+      border: 1px solid var(--border);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 4px 24px rgba(26,22,18,.05);
+      transition: transform .3s, box-shadow .3s;
+      animation: fadeUp .7s ease both;
+    }
+    .grid-article:nth-child(2) { animation-delay: .1s; }
+    .grid-article:nth-child(3) { animation-delay: .2s; }
+    .grid-article:nth-child(4) { animation-delay: .3s; }
+    .grid-article:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 16px 48px rgba(26,22,18,.12);
+    }
+    .grid-art-image {
+      position: relative;
+      height: 220px;
+      background: var(--off-white);
+      overflow: hidden;
+    }
+    .grid-art-image img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      position: absolute; inset: 0;
+      display: block;
+    }
+    .grid-art-image .img-placeholder {
+      height: 100%;
+    }
+    .grid-art-body {
+      padding: 1.8rem 1.6rem 1.6rem;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    .grid-art-body .art-meta { margin-bottom: .9rem; }
+    .grid-art-body h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.3rem;
+      font-weight: 400;
+      line-height: 1.3;
+      color: var(--dark);
+      margin-bottom: .9rem;
+    }
+    .grid-art-body .art-excerpt {
+      font-size: .84rem;
+      margin-bottom: 1.4rem;
+      flex: 1;
+    }
+    .grid-read-btn {
+      font-size: .7rem;
+      font-weight: 500;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: var(--gold);
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: .5rem;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 0;
+    }
+    .grid-read-btn::after { content: '→'; }
+    .grid-read-btn:hover { color: var(--gold-dark); }
+
+    /* ── ARTICLE MODAL ────────────────────────────── */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(26,22,18,.85);
+      z-index: 999;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 4rem 2rem;
+      overflow-y: auto;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .3s;
+    }
+    .modal-overlay.open {
+      opacity: 1;
+      pointer-events: all;
+    }
+    .modal {
+      background: var(--cream);
+      max-width: 760px;
+      width: 100%;
+      position: relative;
+      transform: translateY(30px);
+      transition: transform .3s;
+    }
+    .modal-overlay.open .modal { transform: translateY(0); }
+    .modal-close {
+      position: absolute;
+      top: 1.2rem; right: 1.4rem;
+      background: none; border: none;
+      cursor: pointer;
+      color: var(--muted);
+      font-size: 1.4rem;
+      line-height: 1;
+      z-index: 2;
+      transition: color .2s;
+    }
+    .modal-close:hover { color: var(--dark); }
+    .modal-img {
+      width: 100%;
+      height: 320px;
+      position: relative;
+      overflow: hidden;
+    }
+    .modal-img img { width:100%; height:100%; object-fit: cover; }
+    .modal-img .img-placeholder { height: 100%; }
+    .modal-content { padding: 3rem 3.5rem 4rem; }
+    .modal-content .art-meta { margin-bottom: 1.2rem; }
+    .modal-content h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.8rem, 3vw, 2.6rem);
+      font-weight: 400;
+      line-height: 1.2;
+      color: var(--dark);
+      margin-bottom: 1.8rem;
+    }
+    .modal-body p {
+      font-size: .92rem;
+      color: var(--mid);
+      line-height: 1.85;
+      margin-bottom: 1.2rem;
+    }
+    .modal-body h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.4rem;
+      font-weight: 500;
+      color: var(--dark);
+      margin: 2rem 0 .8rem;
+    }
+    .modal-body ul {
+      list-style: none;
+      margin-bottom: 1.2rem;
+    }
+    .modal-body ul li {
+      font-size: .92rem;
+      color: var(--mid);
+      padding: .4rem 0 .4rem 1.5rem;
+      position: relative;
+      line-height: 1.7;
+    }
+    .modal-body ul li::before {
+      content: '—';
+      position: absolute; left: 0;
+      color: var(--gold);
+      font-weight: 500;
+    }
+    .modal-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1.5rem 0 2rem;
+      font-size: .83rem;
+    }
+    .modal-table th, .modal-table td {
+      border: 1px solid var(--border);
+      padding: .75rem 1rem;
+      text-align: left;
+      line-height: 1.5;
+    }
+    .modal-table th {
+      background: var(--off-white);
+      font-weight: 500;
+      letter-spacing: .06em;
+      color: var(--dark);
+    }
+    .modal-table td { color: var(--mid); }
+    .modal-divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 2rem 0;
+    }
+    .modal-author {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding-top: 2rem;
+      border-top: 1px solid var(--border);
+    }
+    .modal-author .author-avatar { width:46px; height:46px; font-size:1.1rem; }
+    .modal-author .author-name { font-size:.85rem; }
+    .modal-cta {
+      display: inline-block;
+      margin-top: 2.5rem;
+      background: var(--gold);
+      color: #fff;
+      font-size: .76rem;
+      font-weight: 500;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      padding: .85rem 2rem;
+      text-decoration: none;
+      cursor: pointer;
+      border: none;
+      transition: background .25s;
+    }
+    .modal-cta:hover { background: var(--gold-dark); }
+
+    /* ── FOOTER ───────────────────────────────────── */
+    .site-footer {
+      margin-top: 8rem;
+      background: var(--dark);
+      padding: 5rem 5vw 2.5rem;
+      color: rgba(255,255,255,.4);
+    }
+    .footer-grid {
+      max-width: 1180px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 3rem;
+      margin-bottom: 3.5rem;
+    }
+    .footer-brand .logo { font-size: 1.3rem; color: #fff; display: block; margin-bottom: 1rem; }
+    .footer-brand p { font-size: .82rem; line-height: 1.8; max-width: 280px; }
+    .footer-col h4 {
+      font-size: .72rem;
+      font-weight: 500;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1.2rem;
+    }
+    .footer-col ul { list-style: none; }
+    .footer-col ul li { margin-bottom: .6rem; }
+    .footer-col ul li a {
+      font-size: .82rem;
+      color: rgba(255,255,255,.4);
+      text-decoration: none;
+      transition: color .2s;
+    }
+    .footer-col ul li a:hover { color: var(--gold); }
+    .footer-col ul li a.active-link { color: var(--gold); }
+    .footer-bottom {
+      max-width: 1180px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 2rem;
+      border-top: 1px solid rgba(255,255,255,.08);
+      font-size: .75rem;
+    }
+    .footer-bottom a { color: var(--gold); text-decoration: none; }
+
+    /* ── RESPONSIVE ───────────────────────────────── */
+    @media(max-width: 900px) {
+      .featured-article { grid-template-columns: 1fr; }
+      .art-image-wrap { min-height: 280px; }
+      .articles-grid { grid-template-columns: 1fr 1fr; }
+      .footer-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media(max-width: 640px) {
+      nav { gap: 1.2rem; }
+      nav a:not(.nav-cta) { display: none; }
+      .articles-grid { grid-template-columns: 1fr; }
+      .art-body { padding: 2rem 1.5rem; }
+      .modal-content { padding: 2rem 1.5rem 3rem; }
+      .footer-grid { grid-template-columns: 1fr; }
+      .footer-bottom { flex-direction: column; gap: .8rem; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ═══ HEADER ═══════════════════════════════════════════ -->
+  <header class="site-header">
+    <a href="#" class="logo">RP <span>Golden</span> Clinic</a>
+    <nav>
+      <a href="#">Início</a>
+      <a href="#">Tratamentos</a>
+      <a href="#" class="active">Blog</a>
+      <a href="#">Sobre</a>
+      <a href="#" class="nav-cta">Agendar Consulta</a>
+    </nav>
+  </header>
+
+  <!-- ═══ HERO ══════════════════════════════════════════════ -->
+  <section class="blog-hero">
+    <div class="hero-line"></div>
+    <div class="blog-hero-content">
+      <div class="hero-eyebrow">Artigos & Conhecimento</div>
+      <h1>Nossa <em>Curadoria</em><br>de Conteúdo</h1>
+      <p class="hero-sub">Por Dra. Roberta Castro Peres · CRM 160891</p>
+    </div>
+  </section>
+
+  <!-- ═══ ARTICLES ══════════════════════════════════════════ -->
+  <main>
+    <section class="articles-section">
+      <div class="container">
+
+        <div class="section-label">
+          <span>Mais Recente</span>
+        </div>
+
+        <!-- ── FEATURED: ARTIGO 5 (mais recente) ── -->
+        <article class="featured-article" onclick="openModal('art5')">
+          <div class="art-image-wrap">
+            <div class="img-placeholder">
+              <svg width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="#9A7540" stroke-width="1.2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+              <p>Inserir Imagem do Artigo</p>
+            </div>
+            <span class="art-tag">Destaque</span>
+          </div>
+          <div class="art-body">
+            <div>
+              <div class="art-meta">
+                <span class="art-date">28 Novembro 2025</span>
+                <span class="art-dot"></span>
+                <span class="art-read">8 min de leitura</span>
+              </div>
+              <h2>Protocolos de Rejuvenescimento para <em>Mulheres 50+</em>: O Que Realmente Traz Resultados</h2>
+              <p class="art-excerpt">A chegada aos 50 anos é um momento de plenitude, autoconhecimento e segurança. Mas é também a década em que o espelho começa a refletir mudanças estruturais significativas no rosto. Descubra como a dermatologia avançada pode devolver a arquitetura facial da sua juventude com elegância e naturalidade.</p>
+            </div>
+            <div>
+              <div class="art-author">
+                <div class="author-avatar">R</div>
+                <div class="author-info">
+                  <div class="author-name">Dra. Roberta Castro Peres</div>
+                  <div class="author-crm">Diretora Clínica · RP Golden Clinic</div>
+                </div>
+              </div>
+              <button class="read-btn" onclick="openModal('art5')">
+                Leia o artigo completo
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              </button>
+            </div>
+          </div>
+        </article>
+
+        <!-- ── GRID ── -->
+        <div class="section-label">
+          <span>Todos os Artigos</span>
+        </div>
+
+        <div class="articles-grid">
+
+          <!-- Artigo 4 -->
+          <article class="grid-article" onclick="openModal('art4')">
+            <div class="grid-art-image">
+              <div class="img-placeholder">
+                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#9A7540" stroke-width="1.2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+                <p>Inserir Imagem</p>
+              </div>
+              <span class="art-tag">Skincare</span>
+            </div>
+            <div class="grid-art-body">
+              <div class="art-meta">
+                <span class="art-date">14 Setembro 2025</span>
+                <span class="art-dot"></span>
+                <span class="art-read">6 min</span>
+              </div>
+              <h3>Skinimalism: Como Simplificar sua Rotina de Skincare e Obter Melhores Resultados</h3>
+              <p class="art-excerpt">Menos produtos, ativos mais potentes e resultados superiores. Descubra como o minimalismo pode transformar a saúde da sua pele.</p>
+              <button class="grid-read-btn">Ler artigo</button>
+            </div>
+          </article>
+
+          <!-- Artigo 3 -->
+          <article class="grid-article" onclick="openModal('art3')">
+            <div class="grid-art-image">
+              <div class="img-placeholder">
+                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#9A7540" stroke-width="1.2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+                <p>Inserir Imagem</p>
+              </div>
+              <span class="art-tag">Harmonização</span>
+            </div>
+            <div class="grid-art-body">
+              <div class="art-meta">
+                <span class="art-date">20 Junho 2025</span>
+                <span class="art-dot"></span>
+                <span class="art-read">7 min</span>
+              </div>
+              <h3>Harmonização Facial Elegante: Como Evitar Exageros e Preservar Seus Traços</h3>
+              <p class="art-excerpt">A beleza real reside na autenticidade. Entenda como a verdadeira harmonização facial é sobre revelar sua melhor versão — não criar outra pessoa.</p>
+              <button class="grid-read-btn">Ler artigo</button>
+            </div>
+          </article>
+
+          <!-- Artigo 2 -->
+          <article class="grid-article" onclick="openModal('art2')">
+            <div class="grid-art-image">
+              <div class="img-placeholder">
+                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#9A7540" stroke-width="1.2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+                <p>Inserir Imagem</p>
+              </div>
+              <span class="art-tag">Toxina Botulínica</span>
+            </div>
+            <div class="grid-art-body">
+              <div class="art-meta">
+                <span class="art-date">15 Março 2025</span>
+                <span class="art-dot"></span>
+                <span class="art-read">7 min</span>
+              </div>
+              <h3>Rejuvenescimento Natural: Por Que a Toxina Botulínica Preventiva é a Maior Tendência</h3>
+              <p class="art-excerpt">Deixamos de corrigir rugas profundas para prevenir que elas se formem. Descubra a grande revolução na dermatologia estética contemporânea.</p>
+              <button class="grid-read-btn">Ler artigo</button>
+            </div>
+          </article>
+
+          <!-- Artigo 1 -->
+          <article class="grid-article" onclick="openModal('art1')">
+            <div class="grid-art-image">
+              <div class="img-placeholder">
+                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#9A7540" stroke-width="1.2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+                <p>Inserir Imagem</p>
+              </div>
+              <span class="art-tag">Bioestimulador</span>
+            </div>
+            <div class="grid-art-body">
+              <div class="art-meta">
+                <span class="art-date">10 Janeiro 2025</span>
+                <span class="art-dot"></span>
+                <span class="art-read">8 min</span>
+              </div>
+              <h3>Bioestimulador de Colágeno ou Preenchimento: Qual a Diferença e Como Escolher?</h3>
+              <p class="art-excerpt">Dois pilares fundamentais do rejuvenescimento elegante, mas com atuações completamente distintas. Entenda qual tecnologia é ideal para o seu momento.</p>
+              <button class="grid-read-btn">Ler artigo</button>
+            </div>
+          </article>
+
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ═══ FOOTER ════════════════════════════════════════════ -->
+  <footer class="site-footer">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <span class="logo" style="font-family:'Cormorant Garamond',serif;font-size:1.3rem;font-weight:600;letter-spacing:.12em;color:#fff;display:block;margin-bottom:1rem">RP <span style="color:var(--gold)">Golden</span> Clinic</span>
+        <p>Dermatologia estética avançada dedicada a realçar a beleza natural através da ciência, elegância e cuidado humanizado.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Navegação</h4>
+        <ul>
+          <li><span style="font-size:.82rem;color:rgba(255,255,255,.4)">Início</span></li>
+          <li><span style="font-size:.82rem;color:rgba(255,255,255,.4)">Tratamentos</span></li>
+          <li><span style="font-size:.82rem;color:var(--gold)">Blog</span></li>
+          <li><span style="font-size:.82rem;color:rgba(255,255,255,.4)">Sobre a Dra. Roberta</span></li>
+          <li><span style="font-size:.82rem;color:rgba(255,255,255,.4)">Contato</span></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Tratamentos</h4>
+        <ul>
+          <li><span style="font-size:.82rem;color:rgba(255,255,255,.4)">Toxina Botulínica</span></li>
+          <li><span style="font-size:.82rem;color:rgba(255,255,255,.4)">Preenchimento</span></li>
+          <li><span style="font-size:.82rem;color:rgba(255,255,255,.4)">Bioestimuladores</span></li>
+          <li><span style="font-size:.82rem;color:rgba(255,255,255,.4)">Harmonização Facial</span></li>
+          <li><span style="font-size:.82rem;color:rgba(255,255,255,.4)">Skincare Clínico</span></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Contato</h4>
+        <ul>
+          <li><span style="font-size:.82rem;color:rgba(255,255,255,.4)">Instagram</span></li>
+          <li><span style="font-size:.82rem;color:rgba(255,255,255,.4)">WhatsApp</span></li>
+          <li><span style="font-size:.82rem;color:rgba(255,255,255,.4)">Agendar Consulta</span></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2025 RP Golden Clinic · Dra. Roberta Castro Peres</span>
+      <span>Desenvolvido com sofisticação · Política de Privacidade</span>
+    </div>
+  </footer>
+
+  <!-- ═══ MODALS ═══════════════════════════════════════════ -->
+
+  <!-- MODAL: Artigo 1 -->
+  <div class="modal-overlay" id="modal-art1">
+    <div class="modal">
+      <button class="modal-close" onclick="closeModal('art1')">✕</button>
+      <div class="modal-img">
+        <div class="img-placeholder">
+          <svg width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="#9A7540" stroke-width="1.2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+          <p>Inserir Imagem do Artigo</p>
+        </div>
+      </div>
+      <div class="modal-content">
+        <div class="art-meta">
+          <span class="art-date">10 Janeiro 2025</span>
+          <span class="art-dot"></span>
+          <span class="art-read">8 min de leitura</span>
+          <span class="art-dot"></span>
+          <span class="art-read" style="color:var(--gold)">Bioestimulador</span>
+        </div>
+        <h2>Bioestimulador de Colágeno ou Preenchimento: Qual a Diferença e Como Escolher?</h2>
+        <div class="modal-body">
+          <p>No universo da dermatologia estética avançada, a busca por um rosto harmonioso e rejuvenescido frequentemente nos leva a duas das tecnologias mais consagradas: os bioestimuladores de colágeno e os preenchedores de ácido hialurônico. Como diretora clínica da RP Golden Clinic, ouço diariamente a mesma pergunta em meu consultório: "Dra. Roberta, qual dos dois é o melhor para mim?"</p>
+          <p>A resposta não é sobre qual produto é superior, mas sim sobre qual atende às necessidades específicas da sua pele neste momento da sua jornada. Ambos são pilares fundamentais para o que chamamos de "rejuvenescimento elegante", mas atuam de maneiras completamente distintas.</p>
+          <h3>O Que é o Bioestimulador de Colágeno?</h3>
+          <p>O bioestimulador de colágeno (como Sculptra® ou Radiesse®) atua como um "treinador" para as células da sua pele. Em vez de adicionar volume imediato, ele é injetado nas camadas mais profundas para provocar uma resposta inflamatória controlada e benéfica. Essa resposta estimula os fibroblastos — as células responsáveis pela produção de colágeno — a trabalharem em ritmo acelerado.</p>
+          <p>O resultado não é visto no mesmo dia. Ele se constrói progressivamente ao longo de semanas e meses, devolvendo a firmeza, a espessura e a qualidade da pele que perdemos com o passar dos anos. É o tratamento ideal para combater a flacidez e o derretimento facial de forma extremamente natural.</p>
+          <h3>O Que é o Preenchimento com Ácido Hialurônico?</h3>
+          <p>Por outro lado, o preenchimento com ácido hialurônico atua como um "arquiteto" do rosto. O ácido hialurônico é uma substância que já existe naturalmente em nosso organismo, responsável por reter água e conferir hidratação e volume. Quando utilizamos preenchedores, o objetivo é repor estruturas que sofreram reabsorção óssea ou perda de compartimentos de gordura.</p>
+          <h3>Tabela Comparativa</h3>
+          <table class="modal-table">
+            <thead><tr><th>Característica</th><th>Bioestimulador</th><th>Preenchimento (AH)</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Mecanismo</strong></td><td>Estimula colágeno natural</td><td>Adiciona volume imediato</td></tr>
+              <tr><td><strong>Resultados</strong></td><td>Progressivo (2–3 meses)</td><td>Imediato (~15 dias)</td></tr>
+              <tr><td><strong>Indicação</strong></td><td>Flacidez, perda de contorno</td><td>Reposição de volume, sulcos</td></tr>
+              <tr><td><strong>Duração</strong></td><td>18 a 24 meses</td><td>9 a 18 meses</td></tr>
+              <tr><td><strong>Reversibilidade</strong></td><td>Não reversível</td><td>Totalmente reversível</td></tr>
+            </tbody>
+          </table>
+          <h3>Posso Combinar os Dois Tratamentos?</h3>
+          <p>Absolutamente. Na verdade, a combinação de ambos é o que chamamos de "padrão ouro" na RP Golden Clinic. Enquanto o bioestimulador trata a "tela" (a qualidade e firmeza da pele), o preenchedor trata a "moldura" (a estrutura e os contornos). Juntos, eles entregam um resultado tridimensional, sofisticado e duradouro, preservando a sua essência.</p>
+          <hr class="modal-divider">
+          <h3>Perguntas Frequentes</h3>
+          <ul>
+            <li><strong>O bioestimulador dói para aplicar?</strong> O procedimento é muito tolerável. Utilizamos anestésicos locais e cânulas que minimizam o desconforto e o risco de hematomas.</li>
+            <li><strong>O preenchimento vai deixar meu rosto artificial?</strong> Não, se realizado com técnica apurada e senso estético. Nossa filosofia é o "menos é mais". O objetivo é que as pessoas notem que você está descansada e radiante, mas não consigam apontar o que foi feito.</li>
+            <li><strong>A partir de qual idade devo começar?</strong> A produção natural de colágeno começa a cair a partir dos 25 anos. Os bioestimuladores podem ser iniciados de forma preventiva por volta dos 30 anos.</li>
+          </ul>
+          <p>A escolha entre bioestimulador e preenchimento — ou a decisão de combiná-los — requer uma avaliação médica minuciosa. Na RP Golden Clinic, cada plano de tratamento é desenhado sob medida, respeitando sua anatomia e seus desejos.</p>
+        </div>
+        <div class="modal-author">
+          <div class="author-avatar">R</div>
+          <div class="author-info">
+            <div class="author-name">Dra. Roberta Castro Peres · CRM 160891</div>
+            <div class="author-crm">Fundadora e Diretora Clínica da RP Golden Clinic</div>
+          </div>
+        </div>
+        <button class="modal-cta">Agendar Avaliação</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: Artigo 2 -->
+  <div class="modal-overlay" id="modal-art2">
+    <div class="modal">
+      <button class="modal-close" onclick="closeModal('art2')">✕</button>
+      <div class="modal-img">
+        <div class="img-placeholder">
+          <svg width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="#9A7540" stroke-width="1.2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+          <p>Inserir Imagem do Artigo</p>
+        </div>
+      </div>
+      <div class="modal-content">
+        <div class="art-meta">
+          <span class="art-date">15 Março 2025</span>
+          <span class="art-dot"></span>
+          <span class="art-read">7 min de leitura</span>
+          <span class="art-dot"></span>
+          <span class="art-read" style="color:var(--gold)">Toxina Botulínica</span>
+        </div>
+        <h2>Rejuvenescimento Natural: Por Que a Toxina Botulínica Preventiva é a Maior Tendência</h2>
+        <div class="modal-body">
+          <p>Se houvesse um prêmio para o procedimento estético mais cercado de mitos e, ao mesmo tempo, mais amado por quem o experimenta, a toxina botulínica certamente seria a vencedora. Por muito tempo, associou-se o "botox" a rostos congelados e sem expressão. Hoje, na RP Golden Clinic, vivenciamos exatamente o oposto: a toxina botulínica é a nossa maior aliada na preservação da naturalidade.</p>
+          <p>A grande revolução na dermatologia estética não está em novos produtos milagrosos, mas na mudança de momento: deixamos de corrigir rugas profundas para prevenir que elas se formem. É aqui que entra a tendência da toxina botulínica preventiva.</p>
+          <h3>O Que é a Toxina Botulínica Preventiva?</h3>
+          <p>A toxina botulínica atua relaxando temporariamente a musculatura onde é injetada. Com o passar dos anos e a repetição constante dos movimentos musculares, associada à perda natural de colágeno, as dobras na pele começam a marcar mesmo quando o rosto está em repouso. A toxina botulínica preventiva é aplicada antes que a ruga dinâmica se transforme em estática.</p>
+          <h3>A Filosofia do "Melhorar sem Transformar"</h3>
+          <p>Na RP Golden Clinic, nossa abordagem com a toxina botulínica é minimalista e altamente personalizada. Avaliamos a força muscular de cada paciente, a assimetria natural do rosto e, principalmente, a forma como a pessoa se expressa. Aplicamos microdoses estratégicas que suavizam o olhar, levantam levemente a cauda da sobrancelha e abrem a expressão, mantendo a capacidade de sorrir com os olhos e demonstrar emoções genuínas.</p>
+          <h3>Quando é a Hora Certa de Começar?</h3>
+          <p>Não existe uma idade cronológica exata, mas sim uma "idade muscular". O momento ideal para iniciar a prevenção é quando você nota que a linha de expressão demora a sumir após você parar de sorrir ou franzir a testa. Para a maioria dos pacientes, essa janela de oportunidade ocorre entre os 25 e 35 anos.</p>
+          <h3>Benefícios Além da Estética</h3>
+          <ul>
+            <li><strong>Tratamento de Enxaqueca:</strong> O relaxamento muscular pode reduzir drasticamente a frequência e intensidade das dores de cabeça tensionais.</li>
+            <li><strong>Bruxismo:</strong> A aplicação no músculo masseter alivia o apertamento dos dentes, protegendo a saúde dental e afinando o contorno do rosto.</li>
+            <li><strong>Hiperidrose:</strong> Bloqueia o suor excessivo nas axilas, mãos ou pés, devolvendo a qualidade de vida e a segurança social.</li>
+          </ul>
+          <hr class="modal-divider">
+          <h3>Perguntas Frequentes</h3>
+          <ul>
+            <li><strong>Se eu parar de aplicar, meu rosto vai "cair"?</strong> Mito absoluto. Se você interromper o tratamento, seus músculos simplesmente voltarão a se contrair com a força original. O tempo em que você usou a toxina funcionou como uma "poupança" de juventude para a sua pele.</li>
+            <li><strong>Quanto tempo dura o efeito?</strong> Em média, de 4 a 6 meses, dependendo do metabolismo do paciente e da força muscular.</li>
+            <li><strong>O procedimento é doloroso?</strong> Utilizamos agulhas extremamente finas e técnicas de conforto que tornam o procedimento rápido e praticamente indolor.</li>
+          </ul>
+          <p>Envelhecer é um privilégio, mas envelhecer bem é uma escolha. A toxina botulínica preventiva é a ferramenta mais elegante que a ciência nos oferece para pausar o relógio do tempo.</p>
+        </div>
+        <div class="modal-author">
+          <div class="author-avatar">R</div>
+          <div class="author-info">
+            <div class="author-name">Dra. Roberta Castro Peres · CRM 160891</div>
+            <div class="author-crm">Fundadora e Diretora Clínica da RP Golden Clinic</div>
+          </div>
+        </div>
+        <button class="modal-cta">Agendar Avaliação</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: Artigo 3 -->
+  <div class="modal-overlay" id="modal-art3">
+    <div class="modal">
+      <button class="modal-close" onclick="closeModal('art3')">✕</button>
+      <div class="modal-img">
+        <div class="img-placeholder">
+          <svg width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="#9A7540" stroke-width="1.2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+          <p>Inserir Imagem do Artigo</p>
+        </div>
+      </div>
+      <div class="modal-content">
+        <div class="art-meta">
+          <span class="art-date">20 Junho 2025</span>
+          <span class="art-dot"></span>
+          <span class="art-read">7 min de leitura</span>
+          <span class="art-dot"></span>
+          <span class="art-read" style="color:var(--gold)">Harmonização Facial</span>
+        </div>
+        <h2>Harmonização Facial Elegante: Como Evitar Exageros e Preservar Seus Traços</h2>
+        <div class="modal-body">
+          <p>O termo "harmonização facial" ganhou enorme popularidade nos últimos anos, mas, infelizmente, também foi acompanhado por uma onda de resultados padronizados, exagerados e artificiais. Na RP Golden Clinic, acreditamos que a verdadeira harmonização não é sobre transformar você em outra pessoa, mas sim sobre revelar a sua versão mais descansada, equilibrada e elegante. A beleza real reside na autenticidade.</p>
+          <h3>O Que é a Harmonização Facial Elegante?</h3>
+          <p>A harmonização facial elegante é um conjunto de procedimentos estéticos minimamente invasivos, planejados de forma estratégica e individualizada. O objetivo é equilibrar as proporções do rosto, repor volumes perdidos com o envelhecimento, melhorar a qualidade da pele e suavizar sombras e vincos. Utilizamos a ciência da proporção áurea e o profundo conhecimento anatômico para criar resultados que são percebidos como belos, mas que não denunciam a intervenção estética.</p>
+          <h3>Os Pilares da Nossa Abordagem</h3>
+          <ul>
+            <li><strong>Diagnóstico Tridimensional:</strong> Antes de qualquer agulha tocar a pele, realizamos um mapeamento facial completo. Avaliamos a estrutura óssea, os coxins de gordura, a força muscular e a qualidade da pele.</li>
+            <li><strong>Respeito à Identidade:</strong> Cada rosto conta uma história. Nosso papel não é apagar a sua história, mas iluminá-la. Respeitamos as características étnicas e os traços que tornam você única.</li>
+            <li><strong>Construção Progressiva (O "Menos é Mais"):</strong> A elegância não é construída em uma única sessão. Preferimos um planejamento a longo prazo, construindo o resultado em etapas.</li>
+          </ul>
+          <h3>Tecnologias Utilizadas na Harmonização</h3>
+          <ul>
+            <li><strong>Toxina Botulínica:</strong> Para relaxar músculos depressores e suavizar expressões de cansaço.</li>
+            <li><strong>Ácido Hialurônico:</strong> Para estruturação óssea e refinamento de olheiras e lábios.</li>
+            <li><strong>Bioestimuladores de Colágeno:</strong> Para tratar a flacidez e garantir que a pele tenha firmeza.</li>
+            <li><strong>Fios de PDO:</strong> Para estímulo de colágeno localizado ou leve tração dos tecidos.</li>
+          </ul>
+          <hr class="modal-divider">
+          <h3>Perguntas Frequentes</h3>
+          <ul>
+            <li><strong>É possível reverter um preenchimento que não gostei?</strong> Sim. Uma das grandes vantagens do ácido hialurônico é que ele é totalmente reversível com a enzima hialuronidase.</li>
+            <li><strong>Quanto tempo dura o resultado da harmonização?</strong> A toxina botulínica dura de 4 a 6 meses, os preenchedores de ácido hialurônico de 9 a 18 meses, e os bioestimuladores de colágeno podem manter seus efeitos por até 2 anos.</li>
+            <li><strong>O rosto fica inchado após o procedimento?</strong> Um leve inchaço é normal nas primeiras 24 a 48 horas, especialmente em áreas mais vascularizadas como os lábios. Com o uso de cânulas, minimizamos significativamente o trauma.</li>
+          </ul>
+          <p>A harmonização facial não deve ser um selo de padronização, mas uma assinatura de exclusividade. Na RP Golden Clinic, a Dra. Roberta Castro conduz cada planejamento com o olhar de quem entende que a verdadeira sofisticação é discreta.</p>
+        </div>
+        <div class="modal-author">
+          <div class="author-avatar">R</div>
+          <div class="author-info">
+            <div class="author-name">Dra. Roberta Castro Peres · CRM 160891</div>
+            <div class="author-crm">Fundadora e Diretora Clínica da RP Golden Clinic</div>
+          </div>
+        </div>
+        <button class="modal-cta">Agendar Avaliação</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: Artigo 4 -->
+  <div class="modal-overlay" id="modal-art4">
+    <div class="modal">
+      <button class="modal-close" onclick="closeModal('art4')">✕</button>
+      <div class="modal-img">
+        <div class="img-placeholder">
+          <svg width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="#9A7540" stroke-width="1.2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+          <p>Inserir Imagem do Artigo</p>
+        </div>
+      </div>
+      <div class="modal-content">
+        <div class="art-meta">
+          <span class="art-date">14 Setembro 2025</span>
+          <span class="art-dot"></span>
+          <span class="art-read">6 min de leitura</span>
+          <span class="art-dot"></span>
+          <span class="art-read" style="color:var(--gold)">Skincare</span>
+        </div>
+        <h2>Skinimalism: Como Simplificar sua Rotina de Skincare e Obter Melhores Resultados</h2>
+        <div class="modal-body">
+          <p>Nos últimos anos, fomos bombardeados pela ideia de que uma pele perfeita exigia uma rotina de skincare de 10 ou 12 passos. No entanto, como dermatologista, tenho observado no consultório da RP Golden Clinic um efeito colateral preocupante desse excesso: peles sensibilizadas, reativas, com acne cosmética e barreiras cutâneas danificadas.</p>
+          <p>A ciência dermatológica aponta para uma direção muito mais inteligente e sustentável: o Skinimalism (minimalismo na pele). A premissa é simples: menos produtos, ativos mais potentes e resultados superiores.</p>
+          <h3>Por Que o Excesso de Produtos Prejudica a Pele?</h3>
+          <p>A nossa pele possui uma barreira de proteção natural (o manto hidrolipídico) que a defende contra bactérias, poluição e perda de água. Quando aplicamos camadas e camadas de diferentes ácidos, conservantes e fragrâncias, corremos o risco de desequilibrar o pH e romper essa barreira. O resultado? Uma pele que deveria estar radiante torna-se vermelha, descamativa ou propensa a inflamações.</p>
+          <h3>Os 4 Passos Essenciais do Skinimalism</h3>
+          <ul>
+            <li><strong>Limpeza Gentil:</strong> Sabonetes suaves (gel ou espuma) adequados ao seu perfil dermatológico, usados pela manhã e à noite — sem ressecar a pele.</li>
+            <li><strong>Tratamento Direcionado (O Ativo Estrela):</strong> Pela manhã, um bom antioxidante como a Vitamina C. À noite, um renovador celular como o Retinol, Ácido Glicólico ou Bakuchiol.</li>
+            <li><strong>Hidratação Estratégica:</strong> Toda pele precisa de hidratação, inclusive as oleosas. Peles secas beneficiam-se de cremes mais densos com ceramidas; peles oleosas respondem melhor a texturas em gel.</li>
+            <li><strong>Fotoproteção Inegociável:</strong> Um protetor solar de amplo espectro (FPS 50 ou superior), aplicado generosamente todas as manhãs, é o passo mais importante de qualquer rotina antienvelhecimento.</li>
+          </ul>
+          <hr class="modal-divider">
+          <h3>Perguntas Frequentes</h3>
+          <ul>
+            <li><strong>Posso usar maquiagem na rotina minimalista?</strong> Sim! A tendência é usar produtos híbridos, como protetores solares com cor de alta cobertura, que protegem e uniformizam o tom da pele ao mesmo tempo.</li>
+            <li><strong>Quanto tempo leva para ver resultados?</strong> A pele leva cerca de 28 dias para completar seu ciclo de renovação celular. Mantenha a consistência por pelo menos 4 a 6 semanas para avaliar os reais benefícios.</li>
+            <li><strong>Preciso de um creme específico para a área dos olhos?</strong> Depende. Se a sua queixa for apenas hidratação, o hidratante facial pode ser suficiente. Se tiver olheiras, bolsas ou rugas intensas, um produto formulado especificamente é recomendado.</li>
+          </ul>
+          <p>Cuidar da pele não deve ser uma obrigação exaustiva, mas sim um momento de autocuidado prazeroso e eficiente. O Skinimalism prova que a elegância reside na simplicidade.</p>
+        </div>
+        <div class="modal-author">
+          <div class="author-avatar">R</div>
+          <div class="author-info">
+            <div class="author-name">Dra. Roberta Castro Peres · CRM 160891</div>
+            <div class="author-crm">Fundadora e Diretora Clínica da RP Golden Clinic</div>
+          </div>
+        </div>
+        <button class="modal-cta">Agendar Avaliação</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: Artigo 5 -->
+  <div class="modal-overlay" id="modal-art5">
+    <div class="modal">
+      <button class="modal-close" onclick="closeModal('art5')">✕</button>
+      <div class="modal-img">
+        <div class="img-placeholder">
+          <svg width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="#9A7540" stroke-width="1.2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+          <p>Inserir Imagem do Artigo</p>
+        </div>
+      </div>
+      <div class="modal-content">
+        <div class="art-meta">
+          <span class="art-date">28 Novembro 2025</span>
+          <span class="art-dot"></span>
+          <span class="art-read">8 min de leitura</span>
+          <span class="art-dot"></span>
+          <span class="art-read" style="color:var(--gold)">Pele Madura</span>
+        </div>
+        <h2>Protocolos de Rejuvenescimento para Mulheres 50+: O Que Realmente Traz Resultados</h2>
+        <div class="modal-body">
+          <p>A chegada aos 50 anos é, para muitas mulheres, um momento de plenitude, autoconhecimento e segurança. No entanto, é também a década em que o espelho começa a refletir mudanças estruturais significativas no rosto. Na RP Golden Clinic, recebo diariamente mulheres incríveis que não desejam parecer ter 30 anos novamente, mas sim refletir externamente a vitalidade e a energia que sentem por dentro.</p>
+          <p>Para a pele madura, cremes e tratamentos superficiais já não são suficientes. Precisamos de uma abordagem médica estratégica, que atue nas camadas profundas da face.</p>
+          <h3>O Que Acontece com o Rosto Após os 50 Anos?</h3>
+          <ul>
+            <li><strong>Estrutura Óssea:</strong> Perdemos massa óssea, especialmente nas órbitas, maçãs do rosto e mandíbula. A "fundação" do rosto diminui progressivamente.</li>
+            <li><strong>Compartimentos de Gordura:</strong> A gordura facial, que na juventude é alta e firme, começa a atrofiar e deslizar para baixo devido à gravidade, criando o "bigode chinês" e as linhas de marionete.</li>
+            <li><strong>Pele e Colágeno:</strong> A produção de colágeno despenca, especialmente com a aproximação da menopausa e a queda do estrogênio. A pele torna-se mais fina, flácida e menos elástica.</li>
+          </ul>
+          <h3>O Protocolo 3D da RP Golden Clinic</h3>
+          <ul>
+            <li><strong>Passo 1 — A Fundação:</strong> Devolver a sustentação óssea perdida com preenchedores de ácido hialurônico de alta densidade em pontos estratégicos, criando um efeito de "lifting líquido".</li>
+            <li><strong>Passo 2 — A Firmeza:</strong> Aplicação de bioestimuladores (como Sculptra® ou Radiesse®) em toda a face e pescoço para espessar a pele e tratar a flacidez.</li>
+            <li><strong>Passo 3 — O Refinamento:</strong> Toxina botulínica para as rugas dinâmicas, combinada com microagulhamento robótico ou lasers fracionados para manchas e viço da pele.</li>
+          </ul>
+          <h3>A Importância da Abordagem Integrativa</h3>
+          <p>Na RP Golden Clinic, entendemos que a beleza da pele madura está intimamente ligada à saúde global. A queda hormonal da perimenopausa afeta drasticamente a hidratação e a espessura da pele. Por isso, nossa consulta avalia o paciente como um todo, orientando sobre suplementação adequada, antioxidantes orais e estilo de vida, potencializando os resultados dos procedimentos estéticos.</p>
+          <hr class="modal-divider">
+          <h3>Perguntas Frequentes</h3>
+          <ul>
+            <li><strong>É tarde demais para começar aos 60 ou 70 anos?</strong> De forma alguma. A dermatologia moderna possui ferramentas incrivelmente potentes para reverter sinais de envelhecimento já instalados. O importante é iniciar com planejamento adequado e expectativas reais.</li>
+            <li><strong>Os fios de PDO são indicados nessa fase?</strong> Sim. Os fios lisos são perfeitos para estimular colágeno em áreas difíceis. Os fios espiculados oferecem um efeito de tração imediata para casos de flacidez leve a moderada.</li>
+            <li><strong>Quanto tempo demora para ver o resultado final?</strong> O preenchimento e a toxina botulínica oferecem resultados em até 15 dias. O verdadeiro ápice ocorre entre o 3º e o 6º mês, quando os bioestimuladores atingem seu pico de produção de colágeno.</li>
+          </ul>
+          <p>O envelhecimento é um processo natural, mas a forma como você envelhece é uma escolha sua. Os protocolos da RP Golden Clinic são desenhados para devolver a arquitetura facial da sua juventude, com a máxima elegância e discrição.</p>
+        </div>
+        <div class="modal-author">
+          <div class="author-avatar">R</div>
+          <div class="author-info">
+            <div class="author-name">Dra. Roberta Castro Peres · CRM 160891</div>
+            <div class="author-crm">Fundadora e Diretora Clínica da RP Golden Clinic</div>
+          </div>
+        </div>
+        <button class="modal-cta">Agendar Avaliação</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function openModal(id) {
+      const el = document.getElementById('modal-' + id);
+      if (el) { el.classList.add('open'); document.body.style.overflow = 'hidden'; }
+    }
+    function closeModal(id) {
+      const el = document.getElementById('modal-' + id);
+      if (el) { el.classList.remove('open'); document.body.style.overflow = ''; }
+    }
+    // close on overlay click
+    document.querySelectorAll('.modal-overlay').forEach(overlay => {
+      overlay.addEventListener('click', e => {
+        if (e.target === overlay) {
+          overlay.classList.remove('open');
+          document.body.style.overflow = '';
+        }
+      });
+    });
+    // close on ESC
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') {
+        document.querySelectorAll('.modal-overlay.open').forEach(el => {
+          el.classList.remove('open');
+          document.body.style.overflow = '';
+        });
+      }
+    });
+    // stop click inside modal from closing
+    document.querySelectorAll('.modal').forEach(m => {
+      m.addEventListener('click', e => e.stopPropagation());
+    });
+  </script>
+</body>
+</html>

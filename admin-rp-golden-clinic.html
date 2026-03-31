@@ -1,0 +1,1644 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin · RP Golden Clinic Blog</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --gold:        #C9A96E;
+      --gold-light:  #E8D5B0;
+      --gold-dark:   #9A7540;
+      --gold-dim:    rgba(201,169,110,.12);
+      --bg:          #0F0D0A;
+      --surface:     #181410;
+      --surface2:    #201C17;
+      --surface3:    #2A2520;
+      --border:      rgba(201,169,110,.15);
+      --border2:     rgba(255,255,255,.06);
+      --text:        #EDE5D8;
+      --muted:       #7A6E63;
+      --danger:      #C0614A;
+      --success:     #6A9E72;
+      --warn:        #C9993A;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { font-size: 15px; }
+    body {
+      font-family: 'Jost', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      font-weight: 300;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    /* ── SCROLLBAR ───────────────────── */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--surface); }
+    ::-webkit-scrollbar-thumb { background: var(--surface3); border-radius: 3px; }
+
+    /* ════════════════════════════════════
+       LOGIN
+    ════════════════════════════════════ */
+    #login-screen {
+      position: fixed; inset: 0;
+      display: flex; align-items: center; justify-content: center;
+      background: var(--bg);
+      z-index: 999;
+      transition: opacity .4s;
+    }
+    #login-screen.hidden { opacity: 0; pointer-events: none; }
+
+    .login-card {
+      width: 380px;
+      padding: 3rem 2.5rem;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      position: relative;
+      overflow: hidden;
+    }
+    .login-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    }
+    .login-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.5rem;
+      font-weight: 600;
+      letter-spacing: .1em;
+      margin-bottom: .3rem;
+    }
+    .login-logo span { color: var(--gold); }
+    .login-sub {
+      font-size: .72rem;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 2.5rem;
+    }
+    .field { margin-bottom: 1.2rem; }
+    .field label {
+      display: block;
+      font-size: .72rem;
+      font-weight: 500;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: .5rem;
+    }
+    .field input, .field select, .field textarea {
+      width: 100%;
+      background: var(--surface2);
+      border: 1px solid var(--border2);
+      color: var(--text);
+      font-family: 'Jost', sans-serif;
+      font-size: .88rem;
+      font-weight: 300;
+      padding: .75rem 1rem;
+      outline: none;
+      transition: border-color .2s;
+      -webkit-appearance: none;
+    }
+    .field input:focus, .field select:focus, .field textarea:focus {
+      border-color: var(--gold);
+    }
+    .field textarea { resize: vertical; min-height: 100px; }
+    .field select option { background: var(--surface2); }
+    .login-err {
+      font-size: .8rem;
+      color: var(--danger);
+      margin-bottom: 1rem;
+      min-height: 1.2em;
+    }
+    .btn-primary {
+      width: 100%;
+      background: var(--gold);
+      color: var(--bg);
+      border: none;
+      font-family: 'Jost', sans-serif;
+      font-size: .76rem;
+      font-weight: 600;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      padding: .85rem;
+      cursor: pointer;
+      transition: background .2s, transform .1s;
+    }
+    .btn-primary:hover { background: var(--gold-light); }
+    .btn-primary:active { transform: scale(.98); }
+    .login-hint {
+      margin-top: 1.2rem;
+      font-size: .72rem;
+      color: var(--muted);
+      text-align: center;
+    }
+    .login-hint code {
+      color: var(--gold);
+      font-family: monospace;
+    }
+
+    /* ════════════════════════════════════
+       LAYOUT
+    ════════════════════════════════════ */
+    #app { display: flex; min-height: 100vh; }
+
+    /* ── SIDEBAR ─────────────────────── */
+    .sidebar {
+      width: 240px;
+      flex-shrink: 0;
+      background: var(--surface);
+      border-right: 1px solid var(--border2);
+      display: flex;
+      flex-direction: column;
+      position: fixed;
+      top: 0; left: 0; bottom: 0;
+      z-index: 50;
+    }
+    .sidebar-logo {
+      padding: 1.8rem 1.6rem 1.5rem;
+      border-bottom: 1px solid var(--border2);
+    }
+    .sidebar-logo .logo-text {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.2rem;
+      font-weight: 600;
+      letter-spacing: .08em;
+    }
+    .sidebar-logo .logo-text span { color: var(--gold); }
+    .sidebar-logo .logo-sub {
+      font-size: .65rem;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-top: .2rem;
+    }
+
+    .sidebar-nav { padding: 1.5rem 0; flex: 1; }
+    .nav-section-label {
+      font-size: .62rem;
+      font-weight: 500;
+      letter-spacing: .24em;
+      text-transform: uppercase;
+      color: var(--muted);
+      padding: 0 1.6rem;
+      margin-bottom: .6rem;
+    }
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: .9rem;
+      padding: .65rem 1.6rem;
+      font-size: .83rem;
+      font-weight: 400;
+      color: var(--muted);
+      cursor: pointer;
+      transition: color .2s, background .2s;
+      border-left: 2px solid transparent;
+      margin-bottom: .1rem;
+      user-select: none;
+    }
+    .nav-item:hover { color: var(--text); background: var(--gold-dim); }
+    .nav-item.active {
+      color: var(--gold);
+      background: var(--gold-dim);
+      border-left-color: var(--gold);
+    }
+    .nav-item svg { flex-shrink: 0; opacity: .7; }
+    .nav-item.active svg { opacity: 1; }
+    .nav-badge {
+      margin-left: auto;
+      background: var(--gold);
+      color: var(--bg);
+      font-size: .6rem;
+      font-weight: 600;
+      padding: .15rem .45rem;
+      border-radius: 999px;
+    }
+
+    .sidebar-footer {
+      padding: 1.2rem 1.6rem;
+      border-top: 1px solid var(--border2);
+      display: flex;
+      align-items: center;
+      gap: .8rem;
+    }
+    .user-avatar {
+      width: 34px; height: 34px;
+      background: linear-gradient(135deg, var(--gold-dark), var(--gold));
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: .9rem; font-weight: 600;
+      color: var(--bg);
+      flex-shrink: 0;
+    }
+    .user-info { flex: 1; min-width: 0; }
+    .user-name { font-size: .78rem; font-weight: 500; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .user-role { font-size: .65rem; color: var(--muted); }
+    .logout-btn {
+      background: none; border: none; cursor: pointer;
+      color: var(--muted); transition: color .2s;
+      padding: .3rem;
+    }
+    .logout-btn:hover { color: var(--danger); }
+
+    /* ── MAIN ────────────────────────── */
+    .main {
+      margin-left: 240px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+    .topbar {
+      height: 58px;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border2);
+      display: flex;
+      align-items: center;
+      padding: 0 2rem;
+      gap: 1rem;
+      position: sticky;
+      top: 0;
+      z-index: 40;
+    }
+    .topbar-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.3rem;
+      font-weight: 400;
+      color: var(--text);
+      flex: 1;
+    }
+    .topbar-title span { color: var(--gold); }
+    .topbar-actions { display: flex; gap: .8rem; align-items: center; }
+    .btn-sm {
+      display: inline-flex; align-items: center; gap: .5rem;
+      font-family: 'Jost', sans-serif;
+      font-size: .72rem; font-weight: 500;
+      letter-spacing: .14em; text-transform: uppercase;
+      padding: .5rem 1.1rem;
+      border: none; cursor: pointer;
+      transition: background .2s, color .2s;
+    }
+    .btn-sm.gold { background: var(--gold); color: var(--bg); }
+    .btn-sm.gold:hover { background: var(--gold-light); }
+    .btn-sm.ghost { background: transparent; color: var(--muted); border: 1px solid var(--border2); }
+    .btn-sm.ghost:hover { border-color: var(--gold); color: var(--gold); }
+    .btn-sm.danger { background: var(--danger); color: #fff; }
+    .btn-sm.danger:hover { background: #a04030; }
+
+    .content { padding: 2rem; flex: 1; }
+
+    /* ════════════════════════════════════
+       DASHBOARD
+    ════════════════════════════════════ */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.2rem;
+      margin-bottom: 2.5rem;
+    }
+    .stat-card {
+      background: var(--surface);
+      border: 1px solid var(--border2);
+      padding: 1.5rem 1.6rem;
+      position: relative;
+      overflow: hidden;
+      animation: fadeUp .5s ease both;
+    }
+    .stat-card:nth-child(2) { animation-delay: .07s; }
+    .stat-card:nth-child(3) { animation-delay: .14s; }
+    .stat-card:nth-child(4) { animation-delay: .21s; }
+    .stat-card::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 2px;
+      background: var(--gold);
+      transform: scaleX(0);
+      transition: transform .3s;
+      transform-origin: left;
+    }
+    .stat-card:hover::after { transform: scaleX(1); }
+    .stat-label {
+      font-size: .68rem;
+      font-weight: 500;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: .8rem;
+    }
+    .stat-value {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.8rem;
+      font-weight: 300;
+      color: var(--text);
+      line-height: 1;
+      margin-bottom: .4rem;
+    }
+    .stat-sub { font-size: .75rem; color: var(--muted); }
+    .stat-icon {
+      position: absolute;
+      top: 1.2rem; right: 1.4rem;
+      opacity: .08;
+      font-size: 2.5rem;
+    }
+
+    .dash-recent-label {
+      font-size: .72rem;
+      font-weight: 500;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1.2rem;
+      display: flex; align-items: center; gap: 1rem;
+    }
+    .dash-recent-label::after { content: ''; flex:1; height:1px; background: var(--border2); }
+
+    @keyframes fadeUp {
+      from { opacity:0; transform:translateY(20px); }
+      to   { opacity:1; transform:translateY(0); }
+    }
+
+    /* ════════════════════════════════════
+       ARTICLES TABLE
+    ════════════════════════════════════ */
+    .table-toolbar {
+      display: flex; gap: 1rem; align-items: center;
+      margin-bottom: 1.4rem;
+      flex-wrap: wrap;
+    }
+    .search-wrap {
+      position: relative; flex: 1; min-width: 200px;
+    }
+    .search-wrap svg { position:absolute; left:.9rem; top:50%; transform:translateY(-50%); color:var(--muted); }
+    .search-input {
+      width: 100%;
+      background: var(--surface2);
+      border: 1px solid var(--border2);
+      color: var(--text);
+      font-family: 'Jost', sans-serif;
+      font-size: .85rem;
+      font-weight: 300;
+      padding: .6rem 1rem .6rem 2.4rem;
+      outline: none;
+      transition: border-color .2s;
+    }
+    .search-input:focus { border-color: var(--gold); }
+    .filter-select {
+      background: var(--surface2);
+      border: 1px solid var(--border2);
+      color: var(--text);
+      font-family: 'Jost', sans-serif;
+      font-size: .82rem;
+      padding: .6rem 1rem;
+      outline: none;
+      cursor: pointer;
+      -webkit-appearance: none;
+    }
+
+    .table-wrap {
+      background: var(--surface);
+      border: 1px solid var(--border2);
+      overflow: hidden;
+    }
+    table { width: 100%; border-collapse: collapse; }
+    thead tr {
+      border-bottom: 1px solid var(--border2);
+      background: var(--surface2);
+    }
+    th {
+      text-align: left;
+      font-size: .66rem;
+      font-weight: 500;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      color: var(--muted);
+      padding: .9rem 1.2rem;
+      white-space: nowrap;
+    }
+    tbody tr {
+      border-bottom: 1px solid var(--border2);
+      transition: background .15s;
+      animation: fadeUp .4s ease both;
+    }
+    tbody tr:last-child { border-bottom: none; }
+    tbody tr:hover { background: var(--gold-dim); }
+    td {
+      padding: 1rem 1.2rem;
+      font-size: .84rem;
+      color: var(--text);
+      vertical-align: middle;
+    }
+    .td-title { font-weight: 400; max-width: 300px; }
+    .td-title strong { display: block; margin-bottom: .2rem; font-weight: 500; }
+    .td-title span { font-size: .75rem; color: var(--muted); }
+    .badge {
+      display: inline-block;
+      font-size: .63rem;
+      font-weight: 600;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      padding: .25rem .7rem;
+      border-radius: 999px;
+    }
+    .badge.published { background: rgba(106,158,114,.15); color: #6A9E72; }
+    .badge.draft     { background: rgba(201,153,58,.15);  color: #C9993A; }
+    .badge.cat {
+      background: var(--gold-dim);
+      color: var(--gold);
+      border-radius: 0;
+    }
+    .td-actions { display: flex; gap: .5rem; align-items: center; }
+    .icon-btn {
+      background: none; border: 1px solid var(--border2);
+      color: var(--muted); cursor: pointer;
+      padding: .4rem .55rem;
+      display: flex; align-items: center; justify-content: center;
+      transition: all .2s;
+    }
+    .icon-btn:hover { border-color: var(--gold); color: var(--gold); }
+    .icon-btn.del:hover { border-color: var(--danger); color: var(--danger); }
+    .icon-btn.toggle-status:hover { border-color: var(--success); color: var(--success); }
+
+    .empty-state {
+      padding: 4rem;
+      text-align: center;
+      color: var(--muted);
+    }
+    .empty-state svg { margin-bottom: 1rem; opacity: .3; }
+    .empty-state p { font-size: .85rem; }
+
+    /* ════════════════════════════════════
+       EDITOR
+    ════════════════════════════════════ */
+    #editor-view { animation: fadeUp .4s ease; }
+
+    .editor-header {
+      display: flex; align-items: center; gap: 1rem;
+      margin-bottom: 2rem;
+    }
+    .editor-header h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.6rem;
+      font-weight: 400;
+    }
+    .editor-grid {
+      display: grid;
+      grid-template-columns: 1fr 320px;
+      gap: 1.5rem;
+      align-items: start;
+    }
+    .editor-main {
+      background: var(--surface);
+      border: 1px solid var(--border2);
+      padding: 2rem;
+    }
+    .editor-sidebar {
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+    }
+    .editor-panel {
+      background: var(--surface);
+      border: 1px solid var(--border2);
+      padding: 1.5rem;
+    }
+    .panel-title {
+      font-size: .68rem;
+      font-weight: 500;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1.2rem;
+      padding-bottom: .8rem;
+      border-bottom: 1px solid var(--border2);
+    }
+    .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+
+    /* image upload zone */
+    .img-upload-zone {
+      border: 1px dashed var(--border);
+      padding: 2rem;
+      text-align: center;
+      cursor: pointer;
+      transition: border-color .2s, background .2s;
+      position: relative;
+    }
+    .img-upload-zone:hover { border-color: var(--gold); background: var(--gold-dim); }
+    .img-upload-zone input { position:absolute; inset:0; opacity:0; cursor:pointer; width:100%; height:100%; }
+    .img-upload-zone svg { margin-bottom: .6rem; opacity: .4; }
+    .img-upload-zone p { font-size: .78rem; color: var(--muted); }
+    .img-upload-zone span { font-size: .7rem; color: var(--gold); display: block; margin-top: .3rem; }
+    .img-preview {
+      width: 100%;
+      aspect-ratio: 16/9;
+      object-fit: cover;
+      display: none;
+      border: 1px solid var(--border2);
+    }
+
+    /* content textarea */
+    .content-field textarea {
+      width: 100%;
+      min-height: 320px;
+      background: var(--surface2);
+      border: 1px solid var(--border2);
+      color: var(--text);
+      font-family: 'Jost', sans-serif;
+      font-size: .88rem;
+      font-weight: 300;
+      line-height: 1.8;
+      padding: 1rem;
+      outline: none;
+      resize: vertical;
+      transition: border-color .2s;
+    }
+    .content-field textarea:focus { border-color: var(--gold); }
+
+    /* toolbar for content */
+    .content-toolbar {
+      display: flex;
+      gap: .4rem;
+      margin-bottom: .5rem;
+      flex-wrap: wrap;
+    }
+    .fmt-btn {
+      background: var(--surface2);
+      border: 1px solid var(--border2);
+      color: var(--muted);
+      font-size: .72rem;
+      font-family: 'Jost', sans-serif;
+      padding: .3rem .7rem;
+      cursor: pointer;
+      transition: all .15s;
+    }
+    .fmt-btn:hover { border-color: var(--gold); color: var(--gold); }
+
+    /* status toggle in panel */
+    .status-toggle {
+      display: flex;
+      border: 1px solid var(--border2);
+      overflow: hidden;
+    }
+    .status-opt {
+      flex: 1;
+      text-align: center;
+      padding: .55rem;
+      font-size: .72rem;
+      font-weight: 500;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      cursor: pointer;
+      color: var(--muted);
+      transition: background .2s, color .2s;
+      user-select: none;
+    }
+    .status-opt.active.pub { background: rgba(106,158,114,.2); color: #6A9E72; }
+    .status-opt.active.dft { background: rgba(201,153,58,.2); color: #C9993A; }
+
+    /* char counter */
+    .char-counter { font-size: .7rem; color: var(--muted); text-align: right; margin-top: .3rem; }
+    .char-counter.warn { color: var(--warn); }
+
+    /* ════════════════════════════════════
+       CONFIRM MODAL
+    ════════════════════════════════════ */
+    .confirm-overlay {
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,.7);
+      display: flex; align-items: center; justify-content: center;
+      z-index: 800;
+      opacity: 0; pointer-events: none;
+      transition: opacity .25s;
+    }
+    .confirm-overlay.open { opacity: 1; pointer-events: all; }
+    .confirm-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 2.2rem 2rem;
+      width: 360px;
+      position: relative;
+    }
+    .confirm-box::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: var(--danger);
+    }
+    .confirm-box h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.4rem;
+      margin-bottom: .8rem;
+    }
+    .confirm-box p { font-size: .85rem; color: var(--muted); margin-bottom: 1.8rem; line-height: 1.7; }
+    .confirm-actions { display: flex; gap: .8rem; justify-content: flex-end; }
+
+    /* ════════════════════════════════════
+       TOAST
+    ════════════════════════════════════ */
+    .toast-container {
+      position: fixed;
+      bottom: 2rem; right: 2rem;
+      display: flex; flex-direction: column; gap: .6rem;
+      z-index: 900;
+    }
+    .toast {
+      background: var(--surface2);
+      border: 1px solid var(--border2);
+      border-left: 3px solid var(--gold);
+      padding: .9rem 1.2rem;
+      font-size: .82rem;
+      color: var(--text);
+      max-width: 300px;
+      animation: slideIn .3s ease;
+      display: flex; align-items: center; gap: .7rem;
+    }
+    .toast.success { border-left-color: var(--success); }
+    .toast.error   { border-left-color: var(--danger); }
+    @keyframes slideIn {
+      from { opacity:0; transform: translateX(20px); }
+      to   { opacity:1; transform: translateX(0); }
+    }
+
+    /* ── misc ────────────────────────── */
+    .page { display: none; }
+    .page.active { display: block; }
+    .divider { height:1px; background: var(--border2); margin: 1.5rem 0; }
+    .tag { display:inline-flex; align-items:center; gap:.3rem; font-size:.7rem; color:var(--muted); }
+
+    @media(max-width:900px) {
+      .sidebar { width:200px; }
+      .main { margin-left:200px; }
+      .stats-grid { grid-template-columns: 1fr 1fr; }
+      .editor-grid { grid-template-columns: 1fr; }
+    }
+    @media(max-width:640px) {
+      .sidebar { transform: translateX(-100%); }
+      .main { margin-left: 0; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══ LOGIN ═════════════════════════════════════════════ -->
+<div id="login-screen">
+  <div class="login-card">
+    <div class="login-logo">RP <span>Golden</span> Clinic</div>
+    <div class="login-sub">Painel Administrativo · Blog</div>
+    <div class="field">
+      <label>Usuário</label>
+      <input type="text" id="login-user" placeholder="admin" autocomplete="username"/>
+    </div>
+    <div class="field">
+      <label>Senha</label>
+      <input type="password" id="login-pass" placeholder="••••••••" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()"/>
+    </div>
+    <div class="login-err" id="login-err"></div>
+    <button class="btn-primary" onclick="doLogin()">Entrar</button>
+    <div class="login-hint">Acesso demo: <code>admin</code> / <code>golden2025</code></div>
+  </div>
+</div>
+
+<!-- ═══ APP ════════════════════════════════════════════════ -->
+<div id="app" style="display:none">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-text">RP <span>Golden</span></div>
+      <div class="logo-sub">Blog Admin</div>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="nav-section-label">Menu</div>
+      <div class="nav-item active" onclick="goPage('dashboard',this)">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+        Dashboard
+      </div>
+      <div class="nav-item" onclick="goPage('articles',this)">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+        Artigos
+        <span class="nav-badge" id="nav-badge">0</span>
+      </div>
+      <div class="nav-item" onclick="newArticle()">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+        Novo Artigo
+      </div>
+      <div class="divider" style="margin:1rem 1.6rem;width:auto"></div>
+      <div class="nav-section-label">Configurações</div>
+      <div class="nav-item" onclick="goPage('settings',this)">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        Configurações
+      </div>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="user-avatar">R</div>
+      <div class="user-info">
+        <div class="user-name">Dra. Roberta Castro Peres</div>
+        <div class="user-role">CRM 160891 · Administradora</div>
+      </div>
+      <button class="logout-btn" onclick="doLogout()" title="Sair">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16,17 21,12 16,7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+      </button>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <div class="main">
+
+    <!-- TOPBAR -->
+    <div class="topbar">
+      <div class="topbar-title" id="topbar-title">Dashboard</div>
+      <div class="topbar-actions" id="topbar-actions">
+        <a href="blog-rp-golden-clinic.html" target="_blank">
+          <button class="btn-sm ghost">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15,3 21,3 21,9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+            Ver Blog
+          </button>
+        </a>
+        <button class="btn-sm gold" onclick="newArticle()">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Novo Artigo
+        </button>
+      </div>
+    </div>
+
+    <!-- CONTENT -->
+    <div class="content">
+
+      <!-- ── DASHBOARD ── -->
+      <div id="page-dashboard" class="page active">
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-label">Total de Artigos</div>
+            <div class="stat-value" id="stat-total">0</div>
+            <div class="stat-sub">no blog</div>
+            <div class="stat-icon">📝</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Publicados</div>
+            <div class="stat-value" id="stat-pub">0</div>
+            <div class="stat-sub">visíveis no site</div>
+            <div class="stat-icon">✅</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Rascunhos</div>
+            <div class="stat-value" id="stat-draft">0</div>
+            <div class="stat-sub">aguardando revisão</div>
+            <div class="stat-icon">✏️</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Categorias</div>
+            <div class="stat-value" id="stat-cats">0</div>
+            <div class="stat-sub">ativas</div>
+            <div class="stat-icon">🏷</div>
+          </div>
+        </div>
+
+        <div class="dash-recent-label">Artigos Recentes</div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr>
+              <th>Título</th>
+              <th>Categoria</th>
+              <th>Data</th>
+              <th>Status</th>
+            </tr></thead>
+            <tbody id="dash-table-body"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ── ARTICLES ── -->
+      <div id="page-articles" class="page">
+        <div class="table-toolbar">
+          <div class="search-wrap">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <input class="search-input" placeholder="Buscar artigos..." oninput="filterArticles()" id="search-input"/>
+          </div>
+          <select class="filter-select" onchange="filterArticles()" id="filter-cat">
+            <option value="">Todas as categorias</option>
+            <option>Bioestimulador</option>
+            <option>Toxina Botulínica</option>
+            <option>Harmonização Facial</option>
+            <option>Skincare</option>
+            <option>Pele Madura</option>
+          </select>
+          <select class="filter-select" onchange="filterArticles()" id="filter-status">
+            <option value="">Todos os status</option>
+            <option value="published">Publicado</option>
+            <option value="draft">Rascunho</option>
+          </select>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr>
+              <th>Título & Resumo</th>
+              <th>Categoria</th>
+              <th>Data</th>
+              <th>Leitura</th>
+              <th>Status</th>
+              <th>Ações</th>
+            </tr></thead>
+            <tbody id="articles-table-body"></tbody>
+          </table>
+          <div id="articles-empty" class="empty-state" style="display:none">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/></svg>
+            <p>Nenhum artigo encontrado.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── EDITOR ── -->
+      <div id="page-editor" class="page">
+        <div class="editor-header">
+          <button class="btn-sm ghost" onclick="goPage('articles', document.querySelector('.nav-item:nth-child(2)'))">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15,18 9,12 15,6"/></svg>
+            Voltar
+          </button>
+          <h2 id="editor-heading">Novo Artigo</h2>
+        </div>
+        <div class="editor-grid">
+          <!-- main -->
+          <div>
+            <div class="editor-main">
+              <div class="field">
+                <label>Título do Artigo *</label>
+                <input type="text" id="ed-title" placeholder="Ex: Como cuidar da pele no verão..." oninput="updatePreview()"/>
+              </div>
+              <div class="field">
+                <label>Resumo / Excerpt *</label>
+                <textarea id="ed-excerpt" rows="3" placeholder="Breve descrição que aparece na listagem do blog..." oninput="countChars()"></textarea>
+                <div class="char-counter" id="char-counter">0 / 200 caracteres</div>
+              </div>
+              <div class="field content-field">
+                <label>Conteúdo Completo</label>
+                <div class="content-toolbar">
+                  <button class="fmt-btn" onclick="insertFmt('## ','')">H2</button>
+                  <button class="fmt-btn" onclick="insertFmt('### ','')">H3</button>
+                  <button class="fmt-btn" onclick="insertFmt('**','**')"><b>B</b></button>
+                  <button class="fmt-btn" onclick="insertFmt('*','*')"><i>I</i></button>
+                  <button class="fmt-btn" onclick="insertFmt('\n- ','')">Lista</button>
+                  <button class="fmt-btn" onclick="insertFmt('\n---\n','')">Divisor</button>
+                  <button class="fmt-btn" onclick="insertFmt('\n> ','')">Quote</button>
+                </div>
+                <textarea id="ed-content" placeholder="Escreva o conteúdo completo do artigo aqui...&#10;&#10;Use ## para subtítulos, **texto** para negrito, - para listas..."></textarea>
+              </div>
+            </div>
+          </div>
+          <!-- sidebar -->
+          <div class="editor-sidebar">
+
+            <!-- status -->
+            <div class="editor-panel">
+              <div class="panel-title">Status de Publicação</div>
+              <div class="status-toggle">
+                <div class="status-opt pub active" id="st-pub" onclick="setStatus('published')">Publicado</div>
+                <div class="status-opt dft" id="st-dft" onclick="setStatus('draft')">Rascunho</div>
+              </div>
+              <input type="hidden" id="ed-status" value="published"/>
+            </div>
+
+            <!-- meta -->
+            <div class="editor-panel">
+              <div class="panel-title">Informações do Artigo</div>
+              <div class="field">
+                <label>Categoria *</label>
+                <select id="ed-cat">
+                  <option value="">Selecione...</option>
+                  <option>Bioestimulador</option>
+                  <option>Toxina Botulínica</option>
+                  <option>Harmonização Facial</option>
+                  <option>Skincare</option>
+                  <option>Pele Madura</option>
+                  <option>Dermatologia Clínica</option>
+                  <option>Tratamentos Faciais</option>
+                </select>
+              </div>
+              <div class="field-row">
+                <div class="field">
+                  <label>Data</label>
+                  <input type="date" id="ed-date"/>
+                </div>
+                <div class="field">
+                  <label>Leitura (min)</label>
+                  <input type="number" id="ed-readtime" min="1" max="30" value="5" placeholder="5"/>
+                </div>
+              </div>
+              <div class="field">
+                <label>Meta Description (SEO)</label>
+                <textarea id="ed-meta" rows="2" placeholder="Descrição para mecanismos de busca..." style="min-height:70px"></textarea>
+              </div>
+              <div class="field">
+                <label>Palavra-chave Principal</label>
+                <input type="text" id="ed-keyword" placeholder="Ex: bioestimulador de colágeno"/>
+              </div>
+            </div>
+
+            <!-- image -->
+            <div class="editor-panel">
+              <div class="panel-title">Imagem de Capa</div>
+              <img id="img-preview" class="img-preview" alt="Preview"/>
+              <div class="img-upload-zone" id="upload-zone">
+                <input type="file" accept="image/*" onchange="handleImg(event)"/>
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+                <p>Clique ou arraste a imagem</p>
+                <span>PNG, JPG, WEBP — até 5MB</span>
+              </div>
+              <div id="img-name" style="font-size:.72rem;color:var(--muted);margin-top:.5rem;display:none"></div>
+            </div>
+
+            <!-- actions -->
+            <div style="display:flex;flex-direction:column;gap:.6rem">
+              <button class="btn-sm gold" style="width:100%;justify-content:center;padding:.8rem" onclick="saveArticle()">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17,21 17,13 7,13 7,21"/><polyline points="7,3 7,8 15,8"/></svg>
+                Salvar Artigo
+              </button>
+              <button class="btn-sm ghost" style="width:100%;justify-content:center" id="btn-preview-article" onclick="previewArticle()">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                Pré-visualizar
+              </button>
+            </div>
+
+          </div>
+        </div>
+        <input type="hidden" id="ed-id"/>
+        <input type="hidden" id="ed-img-data"/>
+      </div>
+
+      <!-- ── SETTINGS ── -->
+      <div id="page-settings" class="page">
+        <div style="max-width:540px">
+          <div class="editor-panel" style="background:var(--surface);border:1px solid var(--border2);padding:2rem;margin-bottom:1.2rem">
+            <div class="panel-title">Acesso ao Painel</div>
+            <div class="field">
+              <label>Novo Usuário</label>
+              <input type="text" id="set-user" placeholder="admin"/>
+            </div>
+            <div class="field">
+              <label>Nova Senha</label>
+              <input type="password" id="set-pass" placeholder="••••••••"/>
+            </div>
+            <div class="field">
+              <label>Confirmar Senha</label>
+              <input type="password" id="set-pass2" placeholder="••••••••"/>
+            </div>
+            <button class="btn-sm gold" onclick="saveSettings()">Salvar Credenciais</button>
+          </div>
+          <div class="editor-panel" style="background:var(--surface);border:1px solid var(--border2);padding:2rem">
+            <div class="panel-title">Dados do Blog</div>
+            <p style="font-size:.83rem;color:var(--muted);margin-bottom:1.2rem;line-height:1.7">
+              Todos os artigos são armazenados localmente neste navegador via Storage API. Exporte os dados para backup ou para integrar com outro sistema.
+            </p>
+            <div style="display:flex;gap:.7rem">
+              <button class="btn-sm ghost" onclick="exportData()">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7,10 12,15 17,10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                Exportar JSON
+              </button>
+              <button class="btn-sm danger" onclick="confirmClear()">Limpar Todos os Dados</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /content -->
+  </div><!-- /main -->
+</div><!-- /app -->
+
+<!-- CONFIRM MODAL -->
+<div class="confirm-overlay" id="confirm-overlay">
+  <div class="confirm-box">
+    <h3 id="confirm-title">Confirmar Exclusão</h3>
+    <p id="confirm-msg">Tem certeza que deseja excluir este artigo? Esta ação não pode ser desfeita.</p>
+    <div class="confirm-actions">
+      <button class="btn-sm ghost" onclick="closeConfirm()">Cancelar</button>
+      <button class="btn-sm danger" id="confirm-ok-btn">Excluir</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST CONTAINER -->
+<div class="toast-container" id="toast-container"></div>
+
+<script>
+// ══════════════════════════════════════════════════
+// DATA
+// ══════════════════════════════════════════════════
+const STORAGE_KEY = 'rp_golden_articles';
+const CRED_KEY    = 'rp_golden_creds';
+
+const DEFAULT_ARTICLES = [
+  {
+    id: 'art1',
+    title: 'Bioestimulador de Colágeno ou Preenchimento: Qual a Diferença e Como Escolher?',
+    excerpt: 'No universo da dermatologia estética avançada, a busca por um rosto harmonioso frequentemente nos leva a duas tecnologias consagradas. Descubra qual atende às necessidades específicas da sua pele neste momento da sua jornada.',
+    content: `## Bioestimulador de Colágeno ou Preenchimento: Qual a Diferença e Como Escolher?
+
+Como diretora clínica da RP Golden Clinic, ouço diariamente a mesma pergunta: "Dra. Roberta, qual dos dois é o melhor para mim?"
+
+A resposta não é sobre qual produto é superior, mas sim sobre qual atende às necessidades específicas da sua pele neste momento da sua jornada. Ambos são pilares fundamentais para o que chamamos de "rejuvenescimento elegante", mas atuam de maneiras completamente distintas.
+
+## O Que é o Bioestimulador de Colágeno?
+
+O bioestimulador de colágeno (como Sculptra® ou Radiesse®) atua como um "treinador" para as células da sua pele. Em vez de adicionar volume imediato, ele é injetado nas camadas mais profundas para provocar uma resposta inflamatória controlada e benéfica.
+
+Essa resposta estimula os fibroblastos — as células responsáveis pela produção de colágeno — a trabalharem em ritmo acelerado. O resultado se constrói progressivamente ao longo de semanas e meses.
+
+## O Que é o Preenchimento com Ácido Hialurônico?
+
+O preenchimento com ácido hialurônico atua como um "arquiteto" do rosto. O ácido hialurônico é uma substância que já existe naturalmente em nosso organismo, responsável por reter água e conferir hidratação e volume.
+
+## Posso Combinar os Dois Tratamentos?
+
+Absolutamente. Na verdade, a combinação de ambos é o que chamamos de "padrão ouro" na RP Golden Clinic. Juntos, eles entregam um resultado tridimensional, sofisticado e duradouro.
+
+---
+
+A escolha requer uma avaliação médica minuciosa. Na RP Golden Clinic, cada plano de tratamento é desenhado sob medida, respeitando sua anatomia e seus desejos.`,
+    category: 'Bioestimulador',
+    date: '2025-01-10',
+    readtime: 8,
+    status: 'published',
+    meta: 'Entenda as diferenças fundamentais entre bioestimuladores de colágeno e preenchimento com ácido hialurônico.',
+    keyword: 'diferença entre bioestimulador e preenchimento',
+    image: ''
+  },
+  {
+    id: 'art2',
+    title: 'Rejuvenescimento Natural: Por Que a Toxina Botulínica Preventiva é a Maior Tendência',
+    excerpt: 'A grande revolução na dermatologia estética não está em novos produtos milagrosos, mas na mudança de momento: deixamos de corrigir rugas profundas para prevenir que elas se formem. Descubra como funciona essa abordagem.',
+    content: `## Rejuvenescimento Natural: Por Que a Toxina Botulínica Preventiva é a Maior Tendência
+
+A toxina botulínica é a nossa maior aliada na preservação da naturalidade. A grande revolução na dermatologia estética não está em novos produtos milagrosos, mas na mudança de momento.
+
+## O Que é a Toxina Botulínica Preventiva?
+
+A toxina botulínica atua relaxando temporariamente a musculatura onde é injetada. A toxina botulínica preventiva é aplicada antes que a ruga dinâmica se transforme em estática.
+
+## A Filosofia do "Melhorar sem Transformar"
+
+Na RP Golden Clinic, nossa abordagem é minimalista e altamente personalizada. Aplicamos microdoses estratégicas que suavizam o olhar, levantam levemente a cauda da sobrancelha e abrem a expressão.
+
+## Quando é a Hora Certa de Começar?
+
+O momento ideal para iniciar a prevenção é quando você nota que a linha de expressão demora a sumir após você parar de sorrir ou franzir a testa. Para a maioria dos pacientes, essa janela ocorre entre os 25 e 35 anos.
+
+## Benefícios Além da Estética
+
+- Tratamento de Enxaqueca
+- Bruxismo — afinamento do contorno do rosto
+- Hiperidrose — suor excessivo
+
+---
+
+Envelhecer é um privilégio, mas envelhecer bem é uma escolha. Agende sua consulta na RP Golden Clinic.`,
+    category: 'Toxina Botulínica',
+    date: '2025-03-15',
+    readtime: 7,
+    status: 'published',
+    meta: 'Descubra por que a toxina botulínica preventiva é a principal tendência de rejuvenescimento natural.',
+    keyword: 'toxina botulínica preventiva',
+    image: ''
+  },
+  {
+    id: 'art3',
+    title: 'Harmonização Facial Elegante: Como Evitar Exageros e Preservar Seus Traços',
+    excerpt: 'Na RP Golden Clinic, acreditamos que a verdadeira harmonização não é sobre transformar você em outra pessoa, mas sim sobre revelar a sua versão mais descansada, equilibrada e elegante. A beleza real reside na autenticidade.',
+    content: `## Harmonização Facial Elegante: Como Evitar Exageros e Preservar Seus Traços
+
+O termo "harmonização facial" ganhou enorme popularidade nos últimos anos, mas também foi acompanhado por uma onda de resultados padronizados, exagerados e artificiais.
+
+## O Que é a Harmonização Facial Elegante?
+
+A harmonização facial elegante é um conjunto de procedimentos estéticos minimamente invasivos, planejados de forma estratégica e individualizada. Utilizamos a ciência da proporção áurea e o profundo conhecimento anatômico para criar resultados naturais.
+
+## Os Pilares da Nossa Abordagem
+
+### 1. Diagnóstico Tridimensional
+Antes de qualquer agulha tocar a pele, realizamos um mapeamento facial completo.
+
+### 2. Respeito à Identidade
+Cada rosto conta uma história. Nosso papel não é apagar a sua história, mas iluminá-la.
+
+### 3. Construção Progressiva
+A elegância não é construída em uma única sessão. Preferimos um planejamento a longo prazo.
+
+## Tecnologias Utilizadas
+
+- Toxina Botulínica
+- Ácido Hialurônico
+- Bioestimuladores de Colágeno
+- Fios de PDO
+
+---
+
+A harmonização facial não deve ser um selo de padronização, mas uma assinatura de exclusividade.`,
+    category: 'Harmonização Facial',
+    date: '2025-06-20',
+    readtime: 7,
+    status: 'published',
+    meta: 'Entenda o conceito de harmonização facial elegante da RP Golden Clinic. Saiba como realçar sua beleza com segurança.',
+    keyword: 'harmonização facial natural',
+    image: ''
+  },
+  {
+    id: 'art4',
+    title: 'Skinimalism: Como Simplificar sua Rotina de Skincare e Obter Melhores Resultados',
+    excerpt: 'A ciência dermatológica aponta para uma direção mais inteligente e sustentável: o Skinimalism. A premissa é simples — menos produtos, ativos mais potentes e resultados superiores. Descubra os 4 passos essenciais.',
+    content: `## Skinimalism: Como Simplificar sua Rotina de Skincare e Obter Melhores Resultados
+
+Nos últimos anos, fomos bombardeados pela ideia de que uma pele perfeita exigia uma rotina de skincare de 10 ou 12 passos. No entanto, tenho observado um efeito colateral preocupante desse excesso: peles sensibilizadas, reativas, com barreiras cutâneas danificadas.
+
+## Por Que o Excesso de Produtos Prejudica a Pele?
+
+A nossa pele possui uma barreira de proteção natural (o manto hidrolipídico). Quando aplicamos camadas e camadas de diferentes ácidos, conservantes e fragrâncias, corremos o risco de desequilibrar o pH e romper essa barreira.
+
+## Os 4 Passos Essenciais do Skinimalism
+
+### 1. Limpeza Gentil
+Sabonetes suaves adequados ao seu perfil dermatológico, usados pela manhã e à noite.
+
+### 2. Tratamento Direcionado
+- Pela manhã: Vitamina C
+- À noite: Retinol, Ácido Glicólico ou Bakuchiol
+
+### 3. Hidratação Estratégica
+Toda pele precisa de hidratação, inclusive as oleosas.
+
+### 4. Fotoproteção Inegociável
+FPS 50 ou superior, aplicado generosamente todas as manhãs.
+
+---
+
+Cuidar da pele não deve ser uma obrigação exaustiva, mas sim um momento de autocuidado prazeroso e eficiente.`,
+    category: 'Skincare',
+    date: '2025-09-14',
+    readtime: 6,
+    status: 'published',
+    meta: 'Descubra o Skinimalism, a tendência de simplificar a rotina de skincare. Aprenda os passos essenciais.',
+    keyword: 'rotina de skincare minimalista',
+    image: ''
+  },
+  {
+    id: 'art5',
+    title: 'Protocolos de Rejuvenescimento para Mulheres 50+: O Que Realmente Traz Resultados',
+    excerpt: 'A chegada aos 50 anos é um momento de plenitude, autoconhecimento e segurança. Para a pele madura, cremes superficiais já não são suficientes. Descubra o Protocolo 3D da RP Golden Clinic que atua nas camadas profundas da face.',
+    content: `## Protocolos de Rejuvenescimento para Mulheres 50+
+
+Na RP Golden Clinic, recebo diariamente mulheres incríveis que não desejam parecer ter 30 anos novamente, mas sim refletir externamente a vitalidade e a energia que sentem por dentro.
+
+## O Que Acontece com o Rosto Após os 50 Anos?
+
+O envelhecimento ocorre em três dimensões:
+
+1. **Estrutura Óssea**: Perdemos massa óssea, especialmente nas órbitas, maçãs do rosto e mandíbula.
+2. **Compartimentos de Gordura**: A gordura facial começa a atrofiar e deslizar para baixo.
+3. **Pele e Colágeno**: A produção de colágeno despenca com a aproximação da menopausa.
+
+## O Protocolo 3D da RP Golden Clinic
+
+### Passo 1 — A Fundação
+Preenchedores de ácido hialurônico de alta densidade para criar um efeito de "lifting líquido".
+
+### Passo 2 — A Firmeza
+Bioestimuladores (Sculptra® ou Radiesse®) em toda a face e pescoço para tratar a flacidez.
+
+### Passo 3 — O Refinamento
+Toxina botulínica para as rugas dinâmicas + microagulhamento robótico ou lasers fracionados.
+
+## A Importância da Abordagem Integrativa
+
+Na RP Golden Clinic, entendemos que a beleza da pele madura está intimamente ligada à saúde global. Nossa consulta avalia o paciente como um todo.
+
+---
+
+O envelhecimento é um processo natural, mas a forma como você envelhece é uma escolha sua. Permita-se viver esta fase com a autoestima elevada.`,
+    category: 'Pele Madura',
+    date: '2025-11-28',
+    readtime: 8,
+    status: 'published',
+    meta: 'Conheça os protocolos de rejuvenescimento mais eficazes para mulheres acima dos 50 anos.',
+    keyword: 'tratamentos estéticos para pele madura',
+    image: ''
+  }
+];
+
+// ══════════════════════════════════════════════════
+// STORAGE
+// ══════════════════════════════════════════════════
+function loadArticles() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    return raw ? JSON.parse(raw) : null;
+  } catch(e) { return null; }
+}
+function saveArticles(articles) {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(articles));
+}
+function loadCreds() {
+  try {
+    const raw = localStorage.getItem(CRED_KEY);
+    return raw ? JSON.parse(raw) : { user: 'admin', pass: 'golden2025' };
+  } catch(e) { return { user: 'admin', pass: 'golden2025' }; }
+}
+function saveCreds(c) { localStorage.setItem(CRED_KEY, JSON.stringify(c)); }
+
+let articles = loadArticles() || [...DEFAULT_ARTICLES];
+let currentStatus = 'published';
+let confirmCallback = null;
+
+// ══════════════════════════════════════════════════
+// LOGIN
+// ══════════════════════════════════════════════════
+function doLogin() {
+  const u = document.getElementById('login-user').value.trim();
+  const p = document.getElementById('login-pass').value;
+  const creds = loadCreds();
+  if (u === creds.user && p === creds.pass) {
+    document.getElementById('login-screen').classList.add('hidden');
+    document.getElementById('app').style.display = 'flex';
+    initApp();
+  } else {
+    document.getElementById('login-err').textContent = 'Usuário ou senha incorretos.';
+  }
+}
+function doLogout() {
+  document.getElementById('app').style.display = 'none';
+  document.getElementById('login-screen').classList.remove('hidden');
+  document.getElementById('login-err').textContent = '';
+  document.getElementById('login-pass').value = '';
+}
+
+// ══════════════════════════════════════════════════
+// NAVIGATION
+// ══════════════════════════════════════════════════
+function goPage(id, el) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  if (el) el.classList.add('active');
+
+  const titles = { dashboard: 'Dashboard', articles: 'Artigos', editor: 'Editor', settings: 'Configurações' };
+  document.getElementById('topbar-title').textContent = titles[id] || 'Admin';
+
+  if (id === 'articles') renderArticlesTable();
+  if (id === 'dashboard') renderDashboard();
+}
+
+// ══════════════════════════════════════════════════
+// INIT
+// ══════════════════════════════════════════════════
+function initApp() {
+  renderDashboard();
+  renderArticlesTable();
+  updateBadge();
+  const today = new Date().toISOString().split('T')[0];
+  document.getElementById('ed-date').value = today;
+}
+
+function updateBadge() {
+  document.getElementById('nav-badge').textContent = articles.length;
+}
+
+// ══════════════════════════════════════════════════
+// DASHBOARD
+// ══════════════════════════════════════════════════
+function renderDashboard() {
+  const pub = articles.filter(a => a.status === 'published').length;
+  const dft = articles.filter(a => a.status === 'draft').length;
+  const cats = [...new Set(articles.map(a => a.category).filter(Boolean))].length;
+  document.getElementById('stat-total').textContent = articles.length;
+  document.getElementById('stat-pub').textContent   = pub;
+  document.getElementById('stat-draft').textContent = dft;
+  document.getElementById('stat-cats').textContent  = cats;
+
+  const tbody = document.getElementById('dash-table-body');
+  const sorted = [...articles].sort((a,b) => b.date.localeCompare(a.date)).slice(0,5);
+  tbody.innerHTML = sorted.map(a => `
+    <tr>
+      <td class="td-title"><strong>${esc(a.title)}</strong></td>
+      <td><span class="badge cat">${esc(a.category)}</span></td>
+      <td style="color:var(--muted);font-size:.8rem">${fmtDate(a.date)}</td>
+      <td><span class="badge ${a.status}">${a.status === 'published' ? 'Publicado' : 'Rascunho'}</span></td>
+    </tr>`).join('');
+}
+
+// ══════════════════════════════════════════════════
+// ARTICLES TABLE
+// ══════════════════════════════════════════════════
+function renderArticlesTable(list) {
+  const tbody = document.getElementById('articles-table-body');
+  const empty = document.getElementById('articles-empty');
+  const items = list || articles;
+
+  if (!items.length) {
+    tbody.innerHTML = '';
+    empty.style.display = 'block';
+    return;
+  }
+  empty.style.display = 'none';
+
+  const sorted = [...items].sort((a,b) => b.date.localeCompare(a.date));
+  tbody.innerHTML = sorted.map((a,i) => `
+    <tr style="animation-delay:${i*0.04}s">
+      <td class="td-title" style="max-width:280px">
+        <strong>${esc(a.title)}</strong>
+        <span style="display:block;margin-top:.2rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:260px">${esc(a.excerpt.substring(0,80))}…</span>
+      </td>
+      <td><span class="badge cat">${esc(a.category || '—')}</span></td>
+      <td style="color:var(--muted);font-size:.8rem;white-space:nowrap">${fmtDate(a.date)}</td>
+      <td style="color:var(--muted);font-size:.8rem">${a.readtime || '—'} min</td>
+      <td><span class="badge ${a.status}">${a.status === 'published' ? 'Publicado' : 'Rascunho'}</span></td>
+      <td>
+        <div class="td-actions">
+          <button class="icon-btn" onclick="editArticle('${a.id}')" title="Editar">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+          </button>
+          <button class="icon-btn toggle-status" onclick="toggleStatus('${a.id}')" title="${a.status==='published'?'Mover para rascunho':'Publicar'}">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          </button>
+          <button class="icon-btn del" onclick="deleteArticle('${a.id}')" title="Excluir">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3,6 5,6 21,6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+          </button>
+        </div>
+      </td>
+    </tr>`).join('');
+}
+
+function filterArticles() {
+  const q    = document.getElementById('search-input').value.toLowerCase();
+  const cat  = document.getElementById('filter-cat').value;
+  const stat = document.getElementById('filter-status').value;
+  const res  = articles.filter(a => {
+    const matchQ    = !q    || a.title.toLowerCase().includes(q) || (a.excerpt||'').toLowerCase().includes(q);
+    const matchCat  = !cat  || a.category === cat;
+    const matchStat = !stat || a.status === stat;
+    return matchQ && matchCat && matchStat;
+  });
+  renderArticlesTable(res);
+}
+
+// ══════════════════════════════════════════════════
+// EDITOR
+// ══════════════════════════════════════════════════
+function newArticle() {
+  clearEditor();
+  document.getElementById('editor-heading').textContent = 'Novo Artigo';
+  document.getElementById('ed-id').value = '';
+  const today = new Date().toISOString().split('T')[0];
+  document.getElementById('ed-date').value = today;
+  setStatus('published');
+  goPage('editor', null);
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+}
+
+function editArticle(id) {
+  const a = articles.find(x => x.id === id);
+  if (!a) return;
+  clearEditor();
+  document.getElementById('ed-id').value       = a.id;
+  document.getElementById('ed-title').value    = a.title;
+  document.getElementById('ed-excerpt').value  = a.excerpt;
+  document.getElementById('ed-content').value  = a.content;
+  document.getElementById('ed-cat').value      = a.category;
+  document.getElementById('ed-date').value     = a.date;
+  document.getElementById('ed-readtime').value = a.readtime;
+  document.getElementById('ed-meta').value     = a.meta || '';
+  document.getElementById('ed-keyword').value  = a.keyword || '';
+  document.getElementById('ed-img-data').value = a.image || '';
+  setStatus(a.status);
+  document.getElementById('editor-heading').textContent = 'Editar Artigo';
+  if (a.image) {
+    document.getElementById('img-preview').src = a.image;
+    document.getElementById('img-preview').style.display = 'block';
+    document.getElementById('upload-zone').style.display = 'none';
+  }
+  countChars();
+  goPage('editor', null);
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+}
+
+function clearEditor() {
+  ['ed-title','ed-excerpt','ed-content','ed-meta','ed-keyword','ed-img-data'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('ed-cat').value = '';
+  document.getElementById('ed-readtime').value = '5';
+  document.getElementById('img-preview').style.display = 'none';
+  document.getElementById('img-preview').src = '';
+  document.getElementById('upload-zone').style.display = 'block';
+  document.getElementById('img-name').style.display = 'none';
+  document.getElementById('char-counter').textContent = '0 / 200 caracteres';
+  document.getElementById('char-counter').classList.remove('warn');
+}
+
+function setStatus(s) {
+  currentStatus = s;
+  document.getElementById('ed-status').value = s;
+  const pub = document.getElementById('st-pub');
+  const dft = document.getElementById('st-dft');
+  pub.classList.toggle('active', s === 'published');
+  dft.classList.toggle('active', s === 'draft');
+}
+
+function countChars() {
+  const val = document.getElementById('ed-excerpt').value;
+  const cnt = document.getElementById('char-counter');
+  cnt.textContent = `${val.length} / 200 caracteres`;
+  cnt.classList.toggle('warn', val.length > 180);
+}
+
+function saveArticle() {
+  const title   = document.getElementById('ed-title').value.trim();
+  const excerpt = document.getElementById('ed-excerpt').value.trim();
+  const cat     = document.getElementById('ed-cat').value;
+  if (!title) { toast('Informe o título do artigo.', 'error'); return; }
+  if (!excerpt) { toast('Informe o resumo do artigo.', 'error'); return; }
+  if (!cat) { toast('Selecione uma categoria.', 'error'); return; }
+
+  const id = document.getElementById('ed-id').value || ('art_' + Date.now());
+  const existing = articles.findIndex(a => a.id === id);
+  const data = {
+    id,
+    title,
+    excerpt,
+    content:  document.getElementById('ed-content').value,
+    category: cat,
+    date:     document.getElementById('ed-date').value,
+    readtime: parseInt(document.getElementById('ed-readtime').value) || 5,
+    status:   document.getElementById('ed-status').value,
+    meta:     document.getElementById('ed-meta').value,
+    keyword:  document.getElementById('ed-keyword').value,
+    image:    document.getElementById('ed-img-data').value
+  };
+  if (existing >= 0) { articles[existing] = data; }
+  else { articles.push(data); }
+  saveArticles(articles);
+  updateBadge();
+  toast('Artigo salvo com sucesso!', 'success');
+  setTimeout(() => {
+    goPage('articles', document.querySelector('.nav-item:nth-child(2)'));
+  }, 700);
+}
+
+function toggleStatus(id) {
+  const a = articles.find(x => x.id === id);
+  if (!a) return;
+  a.status = a.status === 'published' ? 'draft' : 'published';
+  saveArticles(articles);
+  renderArticlesTable();
+  renderDashboard();
+  toast(`Artigo ${a.status === 'published' ? 'publicado' : 'movido para rascunho'}.`, 'success');
+}
+
+function deleteArticle(id) {
+  const a = articles.find(x => x.id === id);
+  if (!a) return;
+  openConfirm(
+    'Excluir Artigo',
+    `Tem certeza que deseja excluir "<strong>${esc(a.title)}</strong>"? Esta ação não pode ser desfeita.`,
+    () => {
+      articles = articles.filter(x => x.id !== id);
+      saveArticles(articles);
+      updateBadge();
+      renderArticlesTable();
+      renderDashboard();
+      toast('Artigo excluído.', 'success');
+    }
+  );
+}
+
+function previewArticle() {
+  const title = document.getElementById('ed-title').value.trim();
+  if (!title) { toast('Preencha o título para pré-visualizar.', 'error'); return; }
+  toast('Pré-visualização disponível no Blog.', 'success');
+}
+
+// Image upload
+function handleImg(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  if (file.size > 5 * 1024 * 1024) { toast('Imagem muito grande. Máximo 5MB.', 'error'); return; }
+  const reader = new FileReader();
+  reader.onload = ev => {
+    const data = ev.target.result;
+    document.getElementById('ed-img-data').value = data;
+    document.getElementById('img-preview').src = data;
+    document.getElementById('img-preview').style.display = 'block';
+    document.getElementById('upload-zone').style.display = 'none';
+    document.getElementById('img-name').textContent = '✓ ' + file.name;
+    document.getElementById('img-name').style.display = 'block';
+  };
+  reader.readAsDataURL(file);
+}
+
+// Format helpers
+function insertFmt(before, after) {
+  const ta = document.getElementById('ed-content');
+  const s = ta.selectionStart, e = ta.selectionEnd;
+  const selected = ta.value.substring(s, e);
+  const replacement = before + selected + after;
+  ta.setRangeText(replacement, s, e, 'end');
+  ta.focus();
+}
+
+// ══════════════════════════════════════════════════
+// SETTINGS
+// ══════════════════════════════════════════════════
+function saveSettings() {
+  const u  = document.getElementById('set-user').value.trim();
+  const p  = document.getElementById('set-pass').value;
+  const p2 = document.getElementById('set-pass2').value;
+  if (!u) { toast('Informe o nome de usuário.', 'error'); return; }
+  if (!p) { toast('Informe a nova senha.', 'error'); return; }
+  if (p !== p2) { toast('As senhas não coincidem.', 'error'); return; }
+  saveCreds({ user: u, pass: p });
+  toast('Credenciais salvas!', 'success');
+  document.getElementById('set-pass').value = '';
+  document.getElementById('set-pass2').value = '';
+}
+
+function exportData() {
+  const blob = new Blob([JSON.stringify(articles, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'rp-golden-blog-export.json'; a.click();
+  URL.revokeObjectURL(url);
+  toast('Dados exportados com sucesso!', 'success');
+}
+
+function confirmClear() {
+  openConfirm(
+    'Limpar Todos os Dados',
+    'Isso irá <strong>remover permanentemente todos os artigos</strong> e restaurar os dados iniciais. Tem certeza?',
+    () => {
+      articles = [...DEFAULT_ARTICLES];
+      saveArticles(articles);
+      updateBadge();
+      renderDashboard();
+      toast('Dados restaurados para o padrão.', 'success');
+    }
+  );
+}
+
+// ══════════════════════════════════════════════════
+// CONFIRM MODAL
+// ══════════════════════════════════════════════════
+function openConfirm(title, msg, cb) {
+  document.getElementById('confirm-title').textContent = title;
+  document.getElementById('confirm-msg').innerHTML = msg;
+  confirmCallback = cb;
+  document.getElementById('confirm-overlay').classList.add('open');
+  document.getElementById('confirm-ok-btn').onclick = () => {
+    if (confirmCallback) confirmCallback();
+    closeConfirm();
+  };
+}
+function closeConfirm() {
+  document.getElementById('confirm-overlay').classList.remove('open');
+  confirmCallback = null;
+}
+document.getElementById('confirm-overlay').addEventListener('click', e => {
+  if (e.target === document.getElementById('confirm-overlay')) closeConfirm();
+});
+
+// ══════════════════════════════════════════════════
+// TOAST
+// ══════════════════════════════════════════════════
+function toast(msg, type = 'success') {
+  const icons = { success: '✓', error: '✕', info: 'ℹ' };
+  const el = document.createElement('div');
+  el.className = `toast ${type}`;
+  el.innerHTML = `<span style="font-weight:600;color:${type==='error'?'var(--danger)':type==='success'?'var(--success)':'var(--gold)'}">${icons[type]||'•'}</span> ${msg}`;
+  document.getElementById('toast-container').appendChild(el);
+  setTimeout(() => { el.style.opacity='0'; el.style.transition='opacity .4s'; }, 2800);
+  setTimeout(() => el.remove(), 3200);
+}
+
+// ══════════════════════════════════════════════════
+// HELPERS
+// ══════════════════════════════════════════════════
+function esc(s) {
+  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+function fmtDate(d) {
+  if (!d) return '—';
+  const months = ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
+  const [y,m,day] = d.split('-');
+  return `${parseInt(day)} ${months[parseInt(m)-1]} ${y}`;
+}
+function updatePreview() {}
+
+// ══════════════════════════════════════════════════
+// ESC to close confirm
+// ══════════════════════════════════════════════════
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closeConfirm();
+});
+</script>
+</body>
+</html>
